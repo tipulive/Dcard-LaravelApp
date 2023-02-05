@@ -1,0 +1,290 @@
+@baseUrl = http://localhost:8000/api
+@email=company@gmail.com
+@password=1
+@Auth_token=134|iSAUbdoqqZ2NnZb98VZiCAJhgy2igKWsLhW1zKEV
+
+### Company Login
+POST  {{baseUrl}}/AdminLoginEmail/
+Content-Type: application/json
+
+{
+"email": "{{email}}",
+"password": "{{password}}"
+}
+
+###
+###Company Create User
+POST  {{baseUrl}}/CreateUser
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"name": "kebine eric Muna",
+"email": "on@gmail.com",
+"Ccode": "+250",
+"phone": "0782389359",
+"country":"Rwanda",
+"password": "1"
+
+}
+
+
+###Create User and Assign With Card
+POST  {{baseUrl}}/CreateUserAssign
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"name":"kebine eric Muna",
+"email":"on1@gmail.com",
+"Ccode":"+250",
+"phone":"782389358",
+"country":"Rwanda",
+"password":"1",
+"carduid":"TEALTD_7hEnj_1672352175"
+
+}
+###Company GEt Details of Card ID or to check if he reached target
+GET  {{baseUrl}}/GetCardDetail
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"carduid":"TEALTD_7hEnj_1672352175"
+
+
+
+}
+### Get Balance and Bonus of User
+
+GET  {{baseUrl}}/GetBalanceUser
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uid":"kebineericMuna_1674160265"
+
+
+
+}
+### Get Balance and Bonus Hist
+
+GET  {{baseUrl}}/GetBalanceHist
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uid":"kebineericMuna_1668935593",
+"LimitStart":0,
+"LimitEnd":3
+
+
+
+}
+###Company Create Card single card depricated
+POST  {{baseUrl}}/CreateCard
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"numberQr": "kebine eric Muna"
+
+}
+###Company Create Multiple Card
+POST  {{baseUrl}}/CreateMultipleCard
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"numberQr":3
+
+}
+
+###Company Assign Card to User /*uid of user*/
+POST  {{baseUrl}}/AssignCard
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"Ccode": "+250",
+"phone":"0782389359",
+"carduid":"TEALTD_7hEnj_1672352175"
+
+
+
+}
+###Company Syncronous card Data
+
+GET  {{baseUrl}}/CompanySyncCardDownload
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"versionCount":"0"
+
+}
+
+
+###Company Create Promotion
+POST  {{baseUrl}}/CreatePromotionEvent
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"promoName":"Nyota",
+"promoMsg":"i will give you 300 nugura ibintu bya 1000$",
+"reach":"1200",
+"gain":"350",
+"started_date":"22/02/2023",
+"ended_date":"23/02/2023",
+"status":"On"
+
+}
+
+###Company GetAll Promotion
+GET  {{baseUrl}}/GetAllPromotionEvent
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+
+###Company Set Promotion status uid=//promotion ID
+POST  {{baseUrl}}/SetPromotionEventStatus
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uid":"Nyota_1672353378",
+"status":"On"
+
+}
+
+### Company Make User Participate in Events:uid,reach,gain come from promotion
+POST  {{baseUrl}}/ParticipateEvent
+Content-Type: application/json
+Authorization: Bearer {{Auth_token}}
+
+{
+"uid":"kivuBucket_1672353285",
+"uidUser":"kebineericMuna_1668935593",
+"inputData":"900",
+"reach":"1000",
+"gain":"300"
+
+
+}
+### to Redeemed Bonus
+POST  {{baseUrl}}/ParticipateRedeemed
+Content-Type: application/json
+Authorization: Bearer {{Auth_token}}
+
+{
+"uid":"kivuBucket_1672353285",
+"uidUser":"kebineericMuna_1668935593",
+"inputData":"900",
+"reach":"1000",
+"gain":"300"
+
+
+}
+
+### Get All participateEvents
+
+GET  {{baseUrl}}/GetAllParticipateEvent
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uidUser":"kebineericMuna_1668935593"
+
+
+}
+### count all event participated
+GET  {{baseUrl}}/CountParticipateEvent
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uidUser":"kebineericMuna_1668935593"
+
+
+}
+
+### Get All GetReachedParticipateEvent
+
+GET  {{baseUrl}}/GetReachedParticipateEvent
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uidUser":"kebineericMuna_1668935593"
+
+
+}
+### Get All  GetActiveParticipateEvents
+
+GET  {{baseUrl}}/GetActiveParticipateEvent
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uidUser":"kebineericMuna_1668935593"
+
+
+}
+###Safari
+
+###Company Safari Create
+POST  {{baseUrl}}/SafariCreate
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"name":"amakarito",
+"comment":"comment"
+
+
+}
+
+###Company Safari AddItem
+POST  {{baseUrl}}/SafariAddItem
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"safariuid":"amakarito_47lvw_1670704037",
+"uid":"Reona",
+"qty":"25",
+"price":"500",
+"typeData":"Other",
+"comment":"none"
+
+
+
+
+}
+
+###Company Safari Spent //Add Money you paid every Safari
+POST  {{baseUrl}}/SafariSpent
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"numberQr":3
+
+}
+
+###Company Safari Spent //Add Money you paid every Safari
+GET  {{baseUrl}}/SafariCalculate
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"safariuid":"amakarito_47lvw_1670704037",
+"name":"safari"
+
+}
+
+
+
+
+
