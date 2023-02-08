@@ -112,7 +112,7 @@ class TopupController extends Controller
 
 
     }
-    public function AddBonus($input,$action,$moreQuery)
+    public function AddBonus($input,$bonus,$action,$moreQuery)
     {
         $uid=$input["uidUser"];
 
@@ -122,17 +122,17 @@ class TopupController extends Controller
        // $CBonus=$input["CBonus"]??'US';
         //$desc=$input["desc"]??'none';
         $today=$this->today;
-        $gain=$input["gain"];
+
         $check=DB::insert("INSERT INTO topups(uid,uidcreator,subscriber,bonus,created_at,updated_at) VALUES
-        ('$uid','$uidCreator','$subscriber','$gain','$today','$today')
-             ON DUPLICATE KEY UPDATE bonus=bonus+$gain,updated_at='$today'");
+        ('$uid','$uidCreator','$subscriber','$bonus','$today','$today')
+             ON DUPLICATE KEY UPDATE bonus=bonus+$bonus,updated_at='$today'");
 
 if($check)
 {
 
     $action="Bonus";
     $moreQuery="";
-   return (new MyHistoryController)->AddBonus($input,$action,$moreQuery);
+   return (new MyHistoryController)->AddBonus($input,$bonus,$action,$moreQuery);
 
 
 }

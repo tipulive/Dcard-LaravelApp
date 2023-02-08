@@ -165,10 +165,10 @@ Authorization: Bearer {{Auth_token}}
 
 {
 "uid":"kivuBucket_1672353285",
-"uidUser":"kebineericMuna_1668935593",
-"inputData":"900",
-"reach":"1000",
-"gain":"300"
+"uidUser":"kebineericMuna_1674160265",
+"inputData":"-250",
+"reach":"300",
+"gain":"100"
 
 
 }

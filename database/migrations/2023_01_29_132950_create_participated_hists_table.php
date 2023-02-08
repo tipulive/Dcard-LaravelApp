@@ -23,6 +23,8 @@ class CreateParticipatedHistsTable extends Migration
 
             $table->string('promotion_msg')->default('none');//company Name
             $table->string('inputData')->default('0');
+            $table->string('actionName')->default('none')->index('actionName');
+
 
             $table->string('token')->default('none');
             $table->string('started_date')->default('none');

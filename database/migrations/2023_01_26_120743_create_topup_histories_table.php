@@ -20,7 +20,9 @@ class CreateTopupHistoriesTable extends Migration
             $table->string('amount')->default('none');
             $table->string('action')->default('none');
             $table->string('balance')->default('0')->index("balance");
+            $table->string('balance_status')->default('balance')->index("balance_status");// on edit to revoke status of balance
             $table->string('bonus')->default('0')->index("bonus");
+            $table->string('bonus_status')->default('bonus')->index("bonus_status");//on edit to revoke status of bonus
             $table->string('CBalance')->default('US');//currency Balance
             $table->string('CBonus')->default('US');
 

@@ -62,7 +62,7 @@ class MyHistoryController extends Controller
             }
 
     }
-    public function AddBonus($input,$action,$moreQuery){//History of Balance
+    public function AddBonus($input,$bonus,$action,$moreQuery){//History of Balance
         $check=DB::table("topup_histories")
             ->insert([
                 "uid"=>$input["uidUser"],//uid of user
@@ -70,7 +70,7 @@ class MyHistoryController extends Controller
                 "uidCreator"=>Auth::user()->uidCreator,
                 "subscriber"=>Auth::user()->subscriber,
 
-                "bonus"=>$input["gain"]??0,
+                "bonus"=>$bonus??0,
                 "action"=>$action,
                 //"CBonus"=>$input["CBonus"]??'US',
                 //"desc"=>$input["desc"]??'none',
@@ -85,7 +85,7 @@ class MyHistoryController extends Controller
                  "status"=>true,
                  "result"=>$check,
                  "reach"=>$input["reach"],
-                 "gain"=>$input["gain"],//gain found
+                 "gain"=>$bonus,//gain as Bonus
                  "datas"=>$this->today
 
 
@@ -134,6 +134,27 @@ public function BalanceHistUser($input)// and Bonus too
 
 public function participatedHist($input,$action,$moreQuery)
 {
+
+$check=DB::table("participated_hists")
+->insert([
+"uid"=>$input["uid"],
+"uidUser"=>$input['uidUser'],
+"subscriber"=>Auth::user()->subscriber,
+"inputData"=>$input["inputData"],
+'actionName'=>$action,
+//"carduid"=>$input["carduid"],
+"uidCreator"=>Auth::user()->uid,
+"created_at"=>$this->today
+]);
+
+if($check)
+{
+    return true;
+}
+else{
+    return false;
+}
+
 
 }
 

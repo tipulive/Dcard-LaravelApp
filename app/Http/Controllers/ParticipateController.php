@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\TopupController;
+use App\Http\Controllers\MyHistoryController;
 use DB;
 use Auth;
 
@@ -26,8 +27,12 @@ class ParticipateController extends Controller
 
     }
 
-    public function ParticipateEvent($input)
+    public function ParticipateEvent($input)//not done something is wrong
     {
+     return $this->participate($input);
+    }
+    public function participate($input){
+
 
         $check=DB::select("select uid,uidUser,inputData,subscriber from participateds where uid=:uid and uidUser=:uidUser and subscriber=:subscriber  limit 1",array(
             "uid"=>$input['uid'],//event Id
@@ -36,105 +41,158 @@ class ParticipateController extends Controller
            // "subscriber"=>$input['subscriber']
             "subscriber"=>Auth::user()->subscriber
         ));
-
         if($check)
         {
-
-
-
-         $addedInputData=$input['inputData']+$check[0]->inputData;
-
-         if($addedInputData==$input["reach"])
-         {
-             //add Bonus as gain
-
-             $inputData=$input["inputData"];
-             $check2=DB::update("update participateds set status='reached',inputData=inputData+$inputData where uid=:uid and uidUser=:uidUser and subscriber=:subscriber limit 1",array(
-                 "uid"=>$input['uid'],
-                 //"carduid"=>$input['carduid'],
-                 "uidUser"=>$input['uidUser'],
-                 "subscriber"=>Auth::user()->subscriber
-             ));
-
-             if($check2)
-             {
-                $action="AddBonus";
-                $moreQuery="";
-
-  //after topups then
-  return (new TopupController)->AddBonus($input,$action,$moreQuery);
-
-             }
-
-
-
-         }
-         else{
-            $inputData=$input["inputData"];
-            $check1=DB::update("update participateds set inputData=inputData+$inputData where uid=:uid and uidUser=:uidUser and subscriber=:subscriber limit 1",array(
-                "uid"=>$input['uid'],
-                //"carduid"=>$input['carduid'],
-                "uidUser"=>$input['uidUser'],
-                "subscriber"=>Auth::user()->subscriber
-            ));
-
-            if($check1)
+            $inputFromDB=true;
+            $inputData=$check[0]->inputData+$input['inputData'];
+            if($inputData>=$input['reach'])
             {
+                return $this->ParticipateAddBonus($input,$inputData,$inputFromDB);
 
-             return response([
-                 "status"=>true,
-                 "result"=>$check1
-
-
-             ],200);
             }
             else{
-             return response([
-                 "status"=>false,
-                 "result"=>$check1,
+               if($this->UpdateMethodParticipated($input,$inputData))
+               {
+                return $this->AddHisMethodParticipated($input,"Updated");
+                }
+                else{
+                    return response([
+                        "status"=>false,
+                        "result"=>0,
 
-             ],200);
+                    ],200);
+                }
+
+
+            }
+        }
+        else{
+            //hano ndareba nabwo igige $inputData>$input["reach] //call return $this->ParticipateAddBonus($input,$inputData);
+            $inputFromDB=false;
+            $inputData=$input['inputData'];
+            if($inputData>=$input['reach'])
+            {
+                return $this->ParticipateAddBonus($input,$inputData,$inputFromDB);//add Bonus
+
+            }
+            else{
+                if($this->AddMethodParticipated($input,$inputData))//insert InputData,there is no bonus
+                {
+                   return $this->AddHisMethodParticipated($input,"NewInsert");
+                }
+                else{
+                    return response([
+                        "status"=>false,
+                        "result"=>0,
+
+                    ],200);
+                }
+
             }
 
-         }
-
-        /*$check=DB::insert("INSERT INTO topups("") VALUES (4,'Gorilla')
-        ON DUPLICATE KEY UPDATE animal='Gorilla'")*/
-
-
         }
-        else{
 
-            $check2=DB::table("participateds")
-            ->insert([
-            "uid"=>$input["uid"],
-            "uidUser"=>$input['uidUser'],
-            "subscriber"=>Auth::user()->subscriber,
-            "inputData"=>$input["inputData"],
-//"carduid"=>$input["carduid"],
-            "uidCreator"=>Auth::user()->uid,
-            "created_at"=>$this->today
-            ]);
+    }
+    public function ParticipateAddBonus($input,$inputData,$inputFromDB){
 
-        if($check2)
+        $inputDB=$inputData%$input['reach'];
+        $bonus=$input["gain"]*intdiv($inputData,$input['reach']);//example 902/300=3 because of intdiv
+
+        if($inputFromDB)//when Data is available
         {
+         if($this->UpdateMethodParticipated($input,$inputDB))
+         {
+             return $this->AddBonusMethodParticipated($input,$bonus);
+         }
+         else{
+            echo"unable to update new Data";
+         }
+        }
+        else{ //when Data is not Avaialble
 
-         return response([
-             "status"=>true,
-             "result"=>$check2
+        if($this->AddMethodParticipated($input,$inputDB))
+         {
+             return $this->AddBonusMethodParticipated($input,$bonus);
+         }
+         else{
+             echo"unable to insert new Data";
+         }
+        }
 
 
-         ],200);
+    }
+    public function AddBonusMethodParticipated($input,$bonus){
+if((new MyHistoryController)->participatedHist($input,"Reached","none"))//after  Reached Bonus and Update Topup
+{
+   $action="AddBonus";
+   $moreQuery="";
+
+//after topups then
+  return (new TopupController)->AddBonus($input,$bonus,$action,$moreQuery);
+
+}
+else{
+   return response([
+       "status"=>false,
+       "result"=>"unable to save participated History",
+
+   ],200);
+}
+
+    }
+    public function UpdateMethodParticipated($input,$inputDB){
+        $check2=DB::update("update participateds set status='reached',inputData=$inputDB where uid=:uid and uidUser=:uidUser and subscriber=:subscriber limit 1",array(
+            "uid"=>$input['uid'],
+            //"carduid"=>$input['carduid'],
+            "uidUser"=>$input['uidUser'],
+            "subscriber"=>Auth::user()->subscriber
+        ));
+        return $check2;
+    }
+    public function AddMethodParticipated($input,$inputDB)
+    {
+        $check2=DB::table("participateds")
+        ->insert([
+        "uid"=>$input["uid"],
+        "uidUser"=>$input['uidUser'],
+        "subscriber"=>Auth::user()->subscriber,
+        "inputData"=>$inputDB,
+//"carduid"=>$input["carduid"],
+        "uidCreator"=>Auth::user()->uid,
+        "created_at"=>$this->today
+        ]);
+        return $check2;
+
+    }
+    public function AddHisMethodParticipated($input,$status){//this method will apply when there is no Bonus
+
+        if((new MyHistoryController)->participatedHist($input,$status,"none"))//First insert in participateds Table
+        {
+           return response([
+               "status"=>true,
+               "result"=>1
+
+
+           ],200);
+
         }
         else{
-         return response([
-             "status"=>false,
-             "result"=>$check2,
+            return response([
+                "status"=>false,
+                "result"=>"unable to save participated History",
 
-         ],200);
+            ],200);
         }
 
-        }
+    }
+
+    public function participateDate($input){
+        return response([
+            "status"=>true,
+            "result"=>$input
+
+
+        ],200);
     }
 
 
