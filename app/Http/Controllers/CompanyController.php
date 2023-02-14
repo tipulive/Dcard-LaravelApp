@@ -932,6 +932,7 @@ public function CompanySafariCalculate(Request $request){
         }
 
     }
+
     public function CompanyGetReachedParticipateEvent(Request $request){
         if(Auth::check())
         {
@@ -943,6 +944,37 @@ public function CompanySafariCalculate(Request $request){
             {
                 $input=$request->all();
                 return (new ParticipateController)->GetReachedParticipateEvent($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+
+    }
+    public function CompanyGetParticipatedHist(Request $request){
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new MyHistoryController)->GetParticipatedHist($input);
             }
             else{
                 return response([

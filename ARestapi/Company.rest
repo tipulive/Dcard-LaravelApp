@@ -208,18 +208,6 @@ Authorization: Bearer {{Auth_token}}
 
 
 }
-
-### Get All GetReachedParticipateEvent
-
-GET  {{baseUrl}}/GetReachedParticipateEvent
-content-type: application/json;charset=UTF-8
-Authorization: Bearer {{Auth_token}}
-
-{
-"uidUser":"kebineericMuna_1668935593"
-
-
-}
 ### Get All  GetActiveParticipateEvents
 
 GET  {{baseUrl}}/GetActiveParticipateEvent
@@ -231,6 +219,31 @@ Authorization: Bearer {{Auth_token}}
 
 
 }
+### Get All GetReachedParticipateEvent
+
+GET  {{baseUrl}}/GetReachedParticipateEvent
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uidUser":"kebineericMuna_1668935593"
+
+
+}
+
+### Get All inputData and how user send data uid:is promotion id,
+
+GET  {{baseUrl}}/GetParticipatedHist
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uid":"kivuBucket_1672353285",
+"uidUser":"kebineericMuna_1674160265"
+
+
+}
+
 ###Safari
 
 ###Company Safari Create

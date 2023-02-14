@@ -157,6 +157,32 @@ else{
 
 
 }
+public function GetParticipatedHist($input)
+{
+    $check=DB::select("select *from participated_hists where uid=:uid and uidUser=:uidUser order by id desc",array(
+       "uid"=>$input["uid"],
+       "uidUser"=>$input["uidUser"]
+    ));
+
+    if($check)
+    {
+
+     return response([
+         "status"=>true,
+         "count"=>count($check),
+         "result"=>$check
+
+
+     ],200);
+    }
+    else{
+     return response([
+         "status"=>false,
+         "result"=>$check,
+
+     ],200);
+    }
+}
 
 
 }

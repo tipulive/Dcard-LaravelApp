@@ -98,71 +98,66 @@ class AuthUserRegisterController extends Controller
         }
         else{
 
-            $uid=preg_replace('/[^A-Za-z0-9-]/','',$input['name']);//generated on production
-        //echo $this->today;
-        $uid=$uid.""."_".date(time());
-                $check=DB::table("users")
-                ->insert([
-                    'name'=>$input['name'],
+            $carduid=$input["carduid"];
+            $checkCard=DB::update("update cards set status='Assigned' where carduid=:carduid and status='none' limit 1",array(
+                "carduid"=>$carduid
+            ));//this query will make us check if card existed and Assigned to user straight
+            if($CheckCard)
+            {
+                $uid=preg_replace('/[^A-Za-z0-9-]/','',$input['name']);//generated on production
+                //echo $this->today;
+                $uid=$uid.""."_".date(time());
+                        $check=DB::table("users")
+                        ->insert([
+                            'name'=>$input['name'],
 
-                    //'fname'=>$input['fname'],
-                    //'lname'=>$input['lname'],
-                    'email'=>$email??'none',
-                    'Ccode'=>$input['Ccode']??'none',//country code
-                    'phone'=>$input['phone']??'none',
-                    'PhoneNumber'=>$PhoneNumber,
-                    'uidCreator'=>Auth::user()->uid,
+                            //'fname'=>$input['fname'],
+                            //'lname'=>$input['lname'],
+                            'email'=>$email??'none',
+                            'Ccode'=>$input['Ccode']??'none',//country code
+                            'phone'=>$input['phone']??'none',
+                            'PhoneNumber'=>$PhoneNumber,
+                            'uidCreator'=>Auth::user()->uid,
 
-                    'subscriber'=>Auth::user()->subscriber,
-                    'platform'=>env('PLATFORM4'),
-                    'password' =>bcrypt($input['password']),
-                    //'passdecode' =>$input['password'],
-                    'country'=>$input['country'],
-                    "carduid"=>$input["carduid"],
-                    'uid'=>$uid,
-                    'created_at'=>$this->today,
+                            'subscriber'=>Auth::user()->subscriber,
+                            'platform'=>env('PLATFORM4'),
+                            'password' =>bcrypt($input['password']),
+                            //'passdecode' =>$input['password'],
+                            'country'=>$input['country'],
+                            "carduid"=>$input["carduid"],
+                            'uid'=>$uid,
+                            'created_at'=>$this->today,
 
-                ]);
-                if($check)
-                {
-                    //here there is a missing to check if carduid exist in our database,with status created on same company
-                    //this will make me avoid using duplicate card or fraud card
+                        ]);
+                        if($check)
+                        {
 
-                    return response([
-                        "status"=>true,
-                        "result"=>$check
-
-
-                    ],200);
-                    /*$check1=DB::update("update users set carduid=:carduid where uid=:uid",array(
-                        "uid"=>$uid,//uid of user,
-                        "carduid"=>$input["carduid"]//carduid,
-                    ));
-                    if($check)
-                    {
-
-                     return response([
-                         "status"=>true,
-                         "result"=>$check1
+                            return response([
+                                "status"=>true,
+                                "result"=>$check
 
 
-                     ],200);
-                    }
-                    else{
-                     return response([
-                         "status"=>false,
-                         "result"=>$check1,
+                            ],200);
 
-                     ],200);
-                    }*/
-                }
-                else{
-                 return response([
-                     "status"=>false,
-                     "result"=>$check,
 
-                 ],200);
-                }
+                        }
+                        else{
+                         return response([
+                             "status"=>false,
+                             "result"=>$check,
+
+                         ],200);
+                        }
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>"Card is Invalid or already Assigned",
+
+                ],200);
+            }
+
+
 
         }
 
