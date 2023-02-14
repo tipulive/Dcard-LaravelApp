@@ -99,10 +99,10 @@ class AuthUserRegisterController extends Controller
         else{
 
             $carduid=$input["carduid"];
-            $checkCard=DB::update("update cards set status='Assigned' where carduid=:carduid and status='none' limit 1",array(
-                "carduid"=>$carduid
+            $checkCard=DB::update("update cards set status='Assigned' where uid=:uid and status='none' limit 1",array(
+                "uid"=>$carduid
             ));//this query will make us check if card existed and Assigned to user straight
-            if($CheckCard)
+            if($checkCard)
             {
                 $uid=preg_replace('/[^A-Za-z0-9-]/','',$input['name']);//generated on production
                 //echo $this->today;

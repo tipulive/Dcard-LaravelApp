@@ -36,9 +36,9 @@ Authorization: Bearer {{Auth_token}}
 
 {
 "name":"kebine eric Muna",
-"email":"on1@gmail.com",
+"email":"on2@gmail.com",
 "Ccode":"+250",
-"phone":"782389358",
+"phone":"7823893587",
 "country":"Rwanda",
 "password":"1",
 "carduid":"TEALTD_7hEnj_1672352175"
@@ -131,7 +131,7 @@ content-type: application/json;charset=UTF-8
 Authorization: Bearer {{Auth_token}}
 
 {
-"promoName":"Nyota",
+"promoName":"Vita",
 "promoMsg":"i will give you 300 nugura ibintu bya 1000$",
 "reach":"1200",
 "gain":"350",
