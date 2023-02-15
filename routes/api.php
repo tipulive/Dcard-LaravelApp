@@ -64,7 +64,10 @@ Route::get('/GetParticipatedHist','CompanyController@CompanyGetParticipatedHist'
 
 /*company topup User */
 
-Route::post('/Topup','CompanyController@CompanyTopupUser')->name('CompanyTopupUser');
+Route::post('/AddBalance','CompanyController@CompanyTopupUser')->name('CompanyTopupUser');
+Route::post('/EditBalance','CompanyController@CompanyTopupEditBalance')->name('CompanyTopupEditBalance');
+Route::get('/RedeemBalance','CompanyController@CompanyTopupRedeemBalance')->name('CompanyTopupRedeemBalance');
+Route::get('/RedeemBonus','CompanyController@CompanyTopupRedeemBonus')->name('CompanyTopupRedeemBonus');
 Route::get('/GetBalanceUser','CompanyController@CompanyTopupBalanceUser')->name('CompanyTopupBalanceUser');
 Route::get('/GetBalanceHist','CompanyController@CompanyTopupBalanceHistUser')->name('CompanyTopupBalanceHistUser');
 

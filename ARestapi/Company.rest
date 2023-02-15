@@ -44,6 +44,60 @@ Authorization: Bearer {{Auth_token}}
 "carduid":"TEALTD_7hEnj_1672352175"
 
 }
+
+### Add Balance
+
+POST  {{baseUrl}}/AddBalance
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uid":"uid of User",
+"balance":"400",
+"desc":"Balance of User"
+
+
+}
+### EditBalance
+
+POST  {{baseUrl}}/EditBalance
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uid":"uid of User",
+"balance":"400",
+"desc":"Balance of User"
+
+
+}
+### Redeemmed Balance
+GET  {{baseUrl}}/RedeemBalance
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uid":"uid of User",
+"amount":"amount",
+"desc":"descr"
+
+
+
+}
+### Redeemmed Bonus
+GET  {{baseUrl}}/RedeemBonus
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uid":"uid of User",
+"amount":"amount",
+"desc":"desc"
+
+
+
+}
+
 ###Company GEt Details of Card ID or to check if he reached target
 GET  {{baseUrl}}/GetCardDetail
 content-type: application/json;charset=UTF-8
@@ -55,6 +109,7 @@ Authorization: Bearer {{Auth_token}}
 
 
 }
+
 ### Get Balance and Bonus of User
 
 GET  {{baseUrl}}/GetBalanceUser

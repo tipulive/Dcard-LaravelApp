@@ -162,6 +162,14 @@ class AuthUserRegisterController extends Controller
         }
 
     }
+    public function UserEditedByCompanyAssign($input) //create User and Assigned With new Cards
+    {
+
+        $PhoneNumber=$input['Ccode']."".$input['phone'];
+        $email=$input['email']."_".date(time());
+       DB::update("update users set PhoneNumber=$PhoneNumber, where PhoneNumber=");
+
+    }
     public function TestUid(){
 
         return response([
