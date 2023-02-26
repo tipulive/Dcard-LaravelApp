@@ -51,7 +51,7 @@ class ParticipateController extends Controller
 
             }
             else{
-               if($this->UpdateMethodParticipated($input,$inputData))
+               if($this->UpdateMethodParticipated($input,$inputData,"none"))
                {
                 return $this->AddHisMethodParticipated($input,"Updated");
                 }
@@ -100,9 +100,9 @@ class ParticipateController extends Controller
 
         if($inputFromDB)//when Data is available
         {
-         if($this->UpdateMethodParticipated($input,$inputDB))
+         if($this->UpdateMethodParticipated($input,$inputDB,"reached"))
          {
-             return $this->AddBonusMethodParticipated($input,$bonus);
+             return $this->AddBonusMethodParticipated($input,$bonus,"Bonus");
          }
          else{
             echo"unable to update new Data";
@@ -112,7 +112,7 @@ class ParticipateController extends Controller
 
         if($this->AddMethodParticipated($input,$inputDB))
          {
-             return $this->AddBonusMethodParticipated($input,$bonus);
+             return $this->AddBonusMethodParticipated($input,$bonus,"dataIn");
          }
          else{
              echo"unable to insert new Data";
@@ -121,14 +121,14 @@ class ParticipateController extends Controller
 
 
     }
-    public function AddBonusMethodParticipated($input,$bonus){
-if((new MyHistoryController)->participatedHist($input,"Reached","none"))//after  Reached Bonus and Update Topup
+    public function AddBonusMethodParticipated($input,$bonus,$status){
+if((new MyHistoryController)->participatedHist($input,"$status","none"))//after  Reached Bonus and Update Topup
 {
-   $action="AddBonus";
+   $action="Bonus";
    $moreQuery="";
 
 //after topups then
-  return (new TopupController)->AddBonus($input,$bonus,$action,$moreQuery);
+  return (new TopupController)->AddBonus($input,$bonus,$status,$moreQuery);
 
 }
 else{
@@ -140,8 +140,8 @@ else{
 }
 
     }
-    public function UpdateMethodParticipated($input,$inputDB){
-        $check2=DB::update("update participateds set status='reached',inputData=$inputDB where uid=:uid and uidUser=:uidUser and subscriber=:subscriber limit 1",array(
+    public function UpdateMethodParticipated($input,$inputDB,$status){//this method will update
+        $check2=DB::update("update participateds set status='$status',inputData=$inputDB where uid=:uid and uidUser=:uidUser and subscriber=:subscriber limit 1",array(
             "uid"=>$input['uid'],
             //"carduid"=>$input['carduid'],
             "uidUser"=>$input['uidUser'],
@@ -198,64 +198,68 @@ else{
 
     public function ParticipateEditEvent($input)//not finished
     {
+//here inputData=inputDataHist
+
+$check=DB::select("select uid,uidUser,inputData,subscriber from participateds where uid=:uid and uidUser=:uidUser and subscriber=:subscriber  limit 1",array(
+    "uid"=>$input['uid'],//event Id
+    "uidUser"=>$input['uidUser'],
+
+   // "subscriber"=>$input['subscriber']
+    "subscriber"=>Auth::user()->subscriber
+));
+if($check)
+{
+
+    $inputFromDB=true;
+    $inputDB=$check[0]->inputData-$input['inputData'];
+
+  if((abs($inputDB))>=$input["reach"])
+  {
+    $inputData=$input['inputData'];
+    //$inputDB=$inputData%$input['reach'];
+    //$diffInpDB=$check[0]->inputData-$input['inputData'];
+    $inpToDb=$inputDB%$input['reach'];
+    $bonus=$input["gain"]*intdiv($inputDB,$input['reach']);
+
+    if($this->UpdateMethodParticipated($input,$inpToDb,"none"))//problem
+    {
+       return $this->AddBonusMethodParticipated($input,$bonus,"reverse");
+
+    }
+   // Bonus reverse
+
+  }
+  else{
+      // no Bonus reverse only Data to be added on participated_Hist
+
+      if($this->UpdateMethodParticipated($input,$inputDB,"none"))
+      {
+         if((new MyHistoryController)->participatedHist($input,"reverse","none"))//after  Reached Bonus and Update Topup
+         {
+            return response([
+                "status"=>true,
+                "result"=>"success insert participatedHist"
 
 
-
-                 $inputData=$input["inputData"];
-            $check=DB::update("update participateds set inputData=inputData+$inputData where uid=:uid and uidUser=:uidUser limit 1",array(
-                "uid"=>$input['uid'],
-                "uidUser"=>Auth::user()->uidUser
-            ));
-
-            if($check1)
-            {
-
-             return response([
-                 "status"=>true,
-                 "result"=>$check1
+            ],200);
+         }
+         else{
+            return response([
+                "status"=>true,
+                "result"=>"unable insert into participateHist"
 
 
-             ],200);
-            }
-            else{
-             return response([
-                 "status"=>false,
-                 "result"=>$check1,
-
-             ],200);
-            }
-
-
+            ],200);
+         }
 
     }
 
-    public function ParticipateRedeemed($input){
-
-        $check=DB::update("update participateds set status='Redeemed',updated_at=:updated_at where uid=:uid and uidUser=:uidUser and subscriber=:subscriber limit 1",array(
-            "uid"=>$input["uid"],//id of participated
-            "uidUser"=>$input["uidUser"],
-            "subscriber"=>Auth::user()->subscriber,
-            "updated_at"=>$this->today
-        ));
-        if($check)
-        {
-
-         return response([
-             "status"=>true,
-             "result"=>$check
-
-
-         ],200);
-        }
-        else{
-         return response([
-             "status"=>false,
-             "result"=>$check,
-
-         ],200);
-        }
+  }
+}
 
     }
+
+
     public function CountParticipateEvent($input)
     {
 

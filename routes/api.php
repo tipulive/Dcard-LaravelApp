@@ -43,6 +43,8 @@ Route::post('/CreateCompany','AdminController@AdminCreateCompany')->name('AdminC
 /*Company*/
 Route::post('/CreateUser','CompanyController@CompanyCreateUser')->name('CompanyCreateUser');
 Route::post('/CreateUserAssign','CompanyController@CompanyCreateUserAssign')->name('CompanyCreateUserAssign');
+Route::post('/EditUserAssign','CompanyController@CompanyEditUserAssign')->name('CompanyEditUserAssign');
+Route::get('/GetNumberDetail','CompanyController@CompanyGetNumberDetail')->name('CompanyGetNumberDetail');
 Route::get('/GetCardDetail','CompanyController@CompanyGetCardDetail')->name('CompanyGetCardDetail');
 Route::post('/CreateCard','CompanyController@CompanyCreateCard')->name('CompanyCreateCard');
 Route::post('/CreateMultipleCard','CompanyController@CompanyCreateMultipleCard')->name('CompanyCreateMultipleCard');
@@ -55,7 +57,7 @@ Route::post('/SetPromotionEventStatus','CompanyController@CompanySetPromotionEve
 /*company make user Participate */
 Route::post('/ParticipateEvent','CompanyController@CompanyParticipateEvent')->name('CompanyParticipateEvent');
 Route::post('/ParticipateEditEvent','CompanyController@CompanyParticipateEditEvent')->name('CompanyParticipateEditEvent');
-Route::post('/ParticipateRedeemed','CompanyController@CompanyParticipateRedeemed')->name('CompanyParticipateRedeemed');
+
 Route::get('/CountParticipateEvent','CompanyController@CompanyCountParticipateEvent')->name('CompanyCountParticipateEvent');
 Route::get('/GetAllParticipateEvent','CompanyController@CompanyGetAllParticipateEvent')->name('CompanyGetAllParticipateEvent');
 Route::get('/GetActiveParticipateEvent','CompanyController@CompanyGetActiveParticipateEvent')->name('CompanyGetActiveParticipateEvent');
@@ -66,8 +68,8 @@ Route::get('/GetParticipatedHist','CompanyController@CompanyGetParticipatedHist'
 
 Route::post('/AddBalance','CompanyController@CompanyTopupUser')->name('CompanyTopupUser');
 Route::post('/EditBalance','CompanyController@CompanyTopupEditBalance')->name('CompanyTopupEditBalance');
-Route::get('/RedeemBalance','CompanyController@CompanyTopupRedeemBalance')->name('CompanyTopupRedeemBalance');
-Route::get('/RedeemBonus','CompanyController@CompanyTopupRedeemBonus')->name('CompanyTopupRedeemBonus');
+Route::post('/RedeemBalance','CompanyController@CompanyTopupRedeemBalance')->name('CompanyTopupRedeemBalance');
+Route::post('/RedeemBonus','CompanyController@CompanyTopupRedeemBonus')->name('CompanyTopupRedeemBonus');
 Route::get('/GetBalanceUser','CompanyController@CompanyTopupBalanceUser')->name('CompanyTopupBalanceUser');
 Route::get('/GetBalanceHist','CompanyController@CompanyTopupBalanceHistUser')->name('CompanyTopupBalanceHistUser');
 

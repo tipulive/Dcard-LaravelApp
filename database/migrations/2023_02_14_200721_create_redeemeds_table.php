@@ -28,7 +28,7 @@ class CreateRedeemedsTable extends Migration
 
             $table->string('subscriber')->default('none')->index('subscriber');//Company
            // $table->string('purpose')->default('none');//Company
-            $table->longtext('desc')->nullable();
+            $table->longtext('description')->nullable();
             $table->timestamps();
         });
     }

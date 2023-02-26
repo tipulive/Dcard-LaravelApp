@@ -441,6 +441,39 @@ public function CompanySafariCalculate(Request $request){
             ],200);
         }
     }
+    public function CompanyGetNumberDetail(Request $request){
+        if(Auth::check())
+        {
+
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+
+                return (new CardController)-> GetNumberDetail($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+
+    }
     public function CompanyGetCardDetail(Request $request){
         if(Auth::check())
         {
@@ -605,6 +638,7 @@ public function CompanySafariCalculate(Request $request){
         }
 
     }
+
     public function CompanyCreateUserAssign(Request $request){
         if(Auth::check())
         {
@@ -618,6 +652,39 @@ public function CompanySafariCalculate(Request $request){
                 $input=$request->all();
 
                 return (new AuthUserRegisterController)->UserCreatedByCompanyAssign($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+
+    }
+    public function CompanyEditUserAssign(Request $request){
+        if(Auth::check())
+        {
+
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+
+                return (new AuthUserRegisterController)->UserEditedByCompanyAssign($input);
             }
             else{
                 return response([
@@ -869,37 +936,7 @@ public function CompanySafariCalculate(Request $request){
 
     }
 
-    public function CompanyParticipateRedeemed(Request $request){
-        if(Auth::check())
-        {
 
-
-
-
-            if(Auth::user()->platform==$this->platform1)
-            {
-                $input=$request->all();
-                return (new ParticipateController)->GetReachedParticipateEvent($input);
-            }
-            else{
-                return response([
-                    "status"=>false,
-                    "result"=>$this->Admin_Auth_result_error,
-                    "error"=>$this->Admin_Auth_error,
-
-                ],200);
-            }
-        }
-        else{
-            return response([
-                "status"=>false,
-                "result"=>$this->Admin_Auth_result_error,
-                "error"=>$this->Admin_Auth_error,
-
-            ],200);
-        }
-
-    }
 
     public function CompanyCountParticipateEvent(Request $request){
         if(Auth::check())
@@ -1131,7 +1168,7 @@ public function CompanySafariCalculate(Request $request){
             if(Auth::user()->platform==$this->platform1)
             {
                 $input=$request->all();
-                return (new MyHistoryController)->RedeemBalance($input);
+                return (new TopupController)->RedeemBalance($input);
             }
             else{
                 return response([
@@ -1164,7 +1201,7 @@ public function CompanySafariCalculate(Request $request){
             if(Auth::user()->platform==$this->platform1)
             {
                 $input=$request->all();
-                return (new MyHistoryController)->RedeemBonus($input);
+                return (new TopupController)->RedeemBonus($input);
             }
             else{
                 return response([

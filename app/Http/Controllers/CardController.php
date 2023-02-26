@@ -76,14 +76,15 @@ class CardController extends Controller
                     \QrCode::size(500)
                     ->format('png')
                     //->merge('images/api.jpg', 0.5, true)
-                    ->generate($uid, public_path("images/Qr/".$filename.".png"));
+                   // ->generate($uid, public_path("images/Qr/".$filename.".png"));
+                   ->generate($uid,"images/Qr/".$filename.".png");
 
 
 
 
                     if($i==($input["numberQr"]-1))
                     {
-                        (new SyncController)->syncAddCard($input);
+                       // (new SyncController)->syncAddCard($input); this i will make it active if i will add mobile offline and online
                        return response([
                            "status"=>true,
                            "result"=>$i,
@@ -128,6 +129,43 @@ class CardController extends Controller
         }
 
     }
+    public function GetNumberDetail($input)
+    {
+
+        $PhoneNumber=$input['Ccode']."".$input['phone'];
+        $check1=DB::select("select *from users where PhoneNumber=:PhoneNumber limit 1",array(
+            "PhoneNumber"=>$PhoneNumber
+        ));
+        if($check1)
+        {
+
+         return response([
+             "status"=>true,
+             "UserDetail"=>[
+                "uid"=>$check1[0]->uid,
+                "name"=>$check1[0]->name,
+                "email"=>$check1[0]->email,
+                "phone"=>$check1[0]->phone,
+                "Ccode"=>$check1[0]->Ccode,
+                "country"=>$check1[0]->country,
+                "initCountry"=>$check1[0]->initCountry,
+                "PhoneNumber"=>$check1[0]->PhoneNumber,
+                "carduid"=>$check1[0]->carduid
+
+             ],
+
+
+
+         ],200);
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$check1,
+
+            ],200);
+           }
+    }
     public function GetCardDetail($input){// to check if he is already reach target
 
         $check1=DB::select("select *from users where carduid=:carduid limit 1",array(
@@ -145,7 +183,9 @@ class CardController extends Controller
                 "phone"=>$check1[0]->phone,
                 "Ccode"=>$check1[0]->Ccode,
                 "country"=>$check1[0]->country,
-                "PhoneNumber"=>$check1[0]->PhoneNumber
+                "initCountry"=>$check1[0]->initCountry,
+                "PhoneNumber"=>$check1[0]->PhoneNumber,
+                "carduid"=>$check1[0]->carduid
 
              ],
 

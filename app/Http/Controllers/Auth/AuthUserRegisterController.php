@@ -123,6 +123,7 @@ class AuthUserRegisterController extends Controller
                             'platform'=>env('PLATFORM4'),
                             'password' =>bcrypt($input['password']),
                             //'passdecode' =>$input['password'],
+                            'initCountry'=>$input['initCountry'],
                             'country'=>$input['country'],
                             "carduid"=>$input["carduid"],
                             'uid'=>$uid,
@@ -162,14 +163,100 @@ class AuthUserRegisterController extends Controller
         }
 
     }
-    public function UserEditedByCompanyAssign($input) //create User and Assigned With new Cards
+    public function UserEditedByCompanyAssign($input) //Edit User Phone and
     {
 
-        $PhoneNumber=$input['Ccode']."".$input['phone'];
-        $email=$input['email']."_".date(time());
-       DB::update("update users set PhoneNumber=$PhoneNumber, where PhoneNumber=");
+
+        if(strtolower($input["status"])=='card')
+        {
+          if($this->EditCard($input))
+          {
+              return $this->UpdateUserQuery($input);
+          }
+          else{
+            return response([
+                "status"=>false,
+                "result"=>"0",
+                "message"=>"This Card is already Assigned please use another one"
+
+            ],200);
+          }
+        }else{
+            if($this->searchUserEdit($input))
+          {
+            return response([
+                "status"=>false,
+                "result"=>"0",
+                "message"=>"phone Number is taken please add New Phone Number"
+
+            ],200);
+          }
+          else{
+            return $this->UpdateUserQuery($input);
+          }
+        }
+
+       //DB::update("update users set PhoneNumber=$PhoneNumber, where PhoneNumber=");
+
+
 
     }
+    public function EditCard($input)
+    {
+        $carduid=$input["carduid"];
+            $checkCard=DB::update("update cards set status='Assigned' where uid=:uid and status='none' limit 1",array(
+                "uid"=>$carduid
+            ));
+            return $checkCard;
+    }
+    public function searchUserEdit($input)
+   {
+    $PhoneNumber=$input['Ccode']."".$input['phone'];
+    $email=$input['email'];
+    $uid=$input['uid'];
+   $check=DB::select("select *from users where PhoneNumber=:PhoneNumber and uid!='$uid' limit 1",array(
+       "PhoneNumber"=>$PhoneNumber));
+      return $check;
+
+    }
+    public function UpdateUserQuery($input)
+    {
+        $carduid=$input["carduid"];
+        $queryCard=strtolower($input["status"])!='card'?"":",carduid='$carduid'";
+        $PhoneNumber=$input['Ccode']."".$input['phone'];
+        $email=$input['email'];
+        $check2=DB::update("update users set phone=:phone,PhoneNumber=:PhoneNumber,name=:name,email=:email,Ccode=:Ccode,password=:password,country=:country,initCountry=:initCountry,updated_at=:updated_at $queryCard where uid=:uid limit 1",array(
+            "uid"=>$input["uid"],
+            'name'=>$input['name'],
+            'email'=>$email,
+            'Ccode'=>$input['Ccode'],//country code
+            'phone'=>$input['phone']??'none',
+            'PhoneNumber'=>$PhoneNumber,
+            'password'=>bcrypt($input['password']),
+            //'passdecode' =>$input['password'],
+            'initCountry'=>$input['initCountry'],
+            'country'=>$input['country'],
+
+            'updated_at'=>$this->today,
+
+        ));
+        if($check2)
+        {
+            return response([
+                "status"=>true,
+                "result"=>$check2
+
+            ],200);
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$check2
+
+            ],200);
+        }
+    }
+
     public function TestUid(){
 
         return response([

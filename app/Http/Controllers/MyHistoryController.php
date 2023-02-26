@@ -34,7 +34,7 @@ class MyHistoryController extends Controller
 
                 "action"=>$action,
                 "CBalance"=>$input["CBalance"]??'US',
-                "desc"=>$input["desc"]??'none',
+                "description"=>$input["description"]??'none',
                 "created_at"=>$this->today,
             ]);
 

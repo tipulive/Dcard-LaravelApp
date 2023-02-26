@@ -87,7 +87,14 @@ return \QrCode::size(500)
 
 $random = Str::random(5);
 
-echo $random;
+//echo $random;
+return response([
+    "status"=>true,
+    "result"=>$random,
+
+
+
+    ],200);
 
 
     }

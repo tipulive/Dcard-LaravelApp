@@ -23,7 +23,7 @@ class CreateTopupsTable extends Migration
             $table->string('CBonus')->default('US')->index("CBonus");//currency Balance
             $table->string('subscriber')->default('none')->index('subscriber');//Company
             $table->string('purpose')->default('none')->index('purpose');//Company
-            $table->longtext('desc')->nullable();//Company
+            $table->longtext('description')->nullable();//Company
 
             $table->timestamps();
         });

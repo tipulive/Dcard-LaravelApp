@@ -44,13 +44,13 @@ class TopupController extends Controller
           }
           else{
            $balance=$input["balance"];
-            $check=DB::update("update topups set uidCreator=:uidCreator,subscriber=:subscriber,balance=balance+$balance where uid=:uid limit 1",array(
-                "uid"=>$input["uid"],//uid of user
+            $check=DB::update("update topups set uidCreator=:uidCreator,subscriber=:subscriber,updated_at=:updated_at,description=:description,balance=balance+$balance where uid=:uid limit 1",array(
+                "uid"=>$input["uidUser"],//uid of user
                 "uidCreator"=>Auth::user()->uidCreator,
                 "subscriber"=>Auth::user()->subscriber,
-               // "currency"=>$input["amount"],
-                "desc"=>$input["desc"]??'none',
+                "description"=>$input["description"]??'none',
                 "updated_at"=>$this->today
+
             ));
             if($check)
             {
@@ -61,12 +61,12 @@ class TopupController extends Controller
             else{
                 $check=DB::table("topups")
                 ->insert([
-                    "uid"=>$input["uid"],//uid of user
+                    "uid"=>$input["uidUser"],//uid of user
                     "uidCreator"=>Auth::user()->uidCreator,
                     "subscriber"=>Auth::user()->subscriber,
                     "balance"=>$input["balance"],
                     "CBalance"=>$input["CBalance"]??'US',
-                    "desc"=>$input["desc"]??'none',
+                    "description"=>$input["description"]??'none',
                     "created_at"=>$this->today,
                 ]);
 
@@ -101,21 +101,38 @@ class TopupController extends Controller
     }
     public function EditBalance($input)
     {
-        $balance=$input["balance"];
-        $check=DB::update("update topups set uidCreator=:uidCreator,subscriber=:subscriber,balance=balance+$balance where uid=:uid limit 1",array(
-            "uid"=>$input["uid"],//uid of user
-            "uidCreator"=>Auth::user()->uidCreator,
-            "subscriber"=>Auth::user()->subscriber,
-           // "currency"=>$input["amount"],
-            "desc"=>$input["desc"]??'none',
-            "updated_at"=>$this->today
-        ));
-        if($check)
-        {
-            $action="EditedBalance";
-            $moreQuery="";
-           return (new MyHistoryController)->AddBalance($input,$action,$moreQuery);
-        }
+        $validateAmount = Validator::make($input, [
+            // "price" => "numeric|min:0|max:100000000",
+             "balance" => "numeric|min:-100000000|max:100000000",
+
+          ]);
+
+          if($validateAmount->fails()){
+              return response([
+                  "status"=>false,
+                  //"result"=>$validatePrice->errors(),
+                  "result"=> $validateAmount->errors()->getMessages()['balance'][0],
+
+              ],200);
+          }
+          else{
+            $balance=$input["balance"];
+            $check=DB::update("update topups set uidCreator=:uidCreator,subscriber=:subscriber,updated_at=:updated_at,description=:description,balance=balance+$balance where uid=:uid limit 1",array(
+                "uid"=>$input["uidUser"],//uid of user
+                "uidCreator"=>Auth::user()->uidCreator,
+                "subscriber"=>Auth::user()->subscriber,
+               // "currency"=>$input["amount"],
+                "description"=>$input["description"]??'none',
+                "updated_at"=>$this->today
+            ));
+            if($check)
+            {
+                $action="EditedBalance";
+                $moreQuery="";
+               return (new MyHistoryController)->AddBalance($input,$action,$moreQuery);
+            }
+          }
+
     }
     public function AddBonus($input,$bonus,$action,$moreQuery)
     {
@@ -135,8 +152,7 @@ class TopupController extends Controller
 if($check)
 {
 
-    $action="Bonus";
-    $moreQuery="";
+
    return (new MyHistoryController)->AddBonus($input,$bonus,$action,$moreQuery);
 
 
@@ -181,20 +197,97 @@ else{
 
     }
     public function RedeemBalance($input){
+
+        $validateAmount = Validator::make($input, [
+            // "price" => "numeric|min:0|max:100000000",
+             "amount" => "numeric|min:1|max:1000000000",
+
+          ]);
+
+          if($validateAmount->fails()){
+              return response([
+                  "status"=>false,
+                  //"result"=>$validatePrice->errors(),
+                  "result"=> $validateAmount->errors()->getMessages()['amount'][0],
+
+              ],200);
+          }else{
+
+            $amount=$input["amount"];
+            $CheckAmount=DB::update("update topups set balance=balance-$amount where uid=:uid and balance>=$amount limit 1",array(
+                "uid"=>$input["uid"])
+            );
+            if($CheckAmount)
+            {
+                $check=DB::table("redeemeds")
+                ->insert([
+                    "uid"=>$input["uid"],//uid of user
+                    "uidCreator"=>Auth::user()->uidCreator,
+                   // "subscriber"=>Auth::user()->subscriber,
+                    "balance"=>$amount,
+                    "CBalance"=>$input["CBalance"]??'US',
+                    "description"=>$input["description"]??'none',
+                    "created_at"=>$this->today,
+                ]);
+                if($check)
+                {
+
+                 return response([
+                     "status"=>true,
+                     "result"=>$check
+
+
+                 ],200);
+                }
+                else{
+                 return response([
+                     "status"=>false,
+                     "result"=>$check,
+
+                 ],200);
+                }
+            }
+            else{
+                //sorry you can not withdraw greater amount than what you have
+                return response([
+                    "status"=>false,
+                    "result"=>"0",
+                    "message"=>"You Have Insufficient Bonus !"
+
+                ],200);
+            }
+          }
+
+    }
+    public function RedeemBonus($input){
+        $validateAmount = Validator::make($input, [
+            // "price" => "numeric|min:0|max:100000000",
+             "amount" => "numeric|min:1|max:1000000000",
+
+          ]);
+
+          if($validateAmount->fails()){
+              return response([
+                  "status"=>false,
+                  //"result"=>$validatePrice->errors(),
+                  "result"=> $validateAmount->errors()->getMessages()['amount'][0],
+
+              ],200);
+          }else{
         $amount=$input["amount"];
-        $CheckAmountDB::table("update topups set balance=balance-$amount where uid=:uid and balance>=$amount limit 1",array(
+        $CheckAmount=DB::update("update topups set bonus=bonus-$amount where uid=:uid and bonus>=$amount limit 1",array(
             "uid"=>$input["uid"])
         );
-        if($CheckAmountDB)
+        if($CheckAmount)
         {
             $check=DB::table("redeemeds")
             ->insert([
                 "uid"=>$input["uid"],//uid of user
                 "uidCreator"=>Auth::user()->uidCreator,
                // "subscriber"=>Auth::user()->subscriber,
-                "balance"=>$amount,
-                "CBalance"=>$input["CBalance"]??'US',
-                "desc"=>$input["desc"]??'none',
+                "bonus"=>$amount,
+                "CBonus"=>$input["CBonus"]??'US',
+                "description"=>$input["description"]??'none',
                 "created_at"=>$this->today,
             ]);
             if($check)
@@ -225,50 +318,6 @@ else{
             ],200);
         }
     }
-    public function RedeemBonus($input){
-        $amount=$input["amount"];
-        $CheckAmountDB::table("update topups set bonus=bonus-$amount where uid=:uid and bonus>=$amount limit 1",array(
-            "uid"=>$input["uid"])
-        );
-        if($CheckAmountDB)
-        {
-            $check=DB::table("redeemeds")
-            ->insert([
-                "uid"=>$input["uid"],//uid of user
-                "uidCreator"=>Auth::user()->uidCreator,
-               // "subscriber"=>Auth::user()->subscriber,
-                "bonus"=>$amount,
-                "CBonus"=>$input["CBonus"]??'US',
-                "desc"=>$input["desc"]??'none',
-                "created_at"=>$this->today,
-            ]);
-            if($check)
-            {
-
-             return response([
-                 "status"=>true,
-                 "result"=>$check
-
-
-             ],200);
-            }
-            else{
-             return response([
-                 "status"=>false,
-                 "result"=>$check,
-
-             ],200);
-            }
-        }
-        else{
-            //sorry you can not withdraw greater amount than what you have
-            return response([
-                "status"=>false,
-                "result"=>"0",
-                "message"=>"You Have Insufficient Bonus !"
-
-            ],200);
-        }
     }
 
 

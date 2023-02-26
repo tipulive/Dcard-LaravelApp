@@ -34,6 +34,7 @@ class CreateUsersTable extends Migration
             $table->string('age')->default('none')->index("age");
 
 
+            $table->string('initCountry')->default('none');
             $table->string('country')->default('none')->index("country");
             $table->string('marital_status')->default('none')->index("marital_status");
             $table->rememberToken();
