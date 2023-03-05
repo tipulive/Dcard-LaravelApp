@@ -28,6 +28,9 @@ class PromotionController extends Controller
     {
         $uid=preg_replace('/[^A-Za-z0-9-]/','',$input['promoName']);
         $uid=$uid.""."_".date(time());
+        $extension=$input["extended_date"];
+           $started=explode('to',$extension)[0];
+           $endto=explode('to',$extension)[1];
         $check=DB::table("promotions")
         ->insert([
          "uid"=>$uid,
@@ -38,8 +41,8 @@ class PromotionController extends Controller
          "reach"=>$input["reach"],//number
          "gain"=>$input["gain"],//number
          "token"=>$input["token"]??'none',//token that is equal after promotion finished
-         "started_date"=>$input["started_date"],
-         "ended_date"=>$input["ended_date"],
+         "started_date"=>$started,
+         "ended_date"=>$endto,
          "status"=>"On",
          "created_at"=>$this->today,
 

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\CompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,13 @@ use App\Http\Controllers\TestController;
 */
 
 
-Route::get('/pdf', function () {
-    return view('myPDF');
+Route::get('/ViewCard', function () {
+    return view('PrintCard');
 });
+
+Route::get('/submit-form','TestController@submitForm')->middleware('auth:sanctum');
+
+
 Route::get('qrcode', 'TestController@generateQrCode');
 Route::get('testPostdata', 'TestController@testPostdata');
 

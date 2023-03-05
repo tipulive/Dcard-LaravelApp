@@ -1,8 +1,8 @@
 <!-- Main CSS-->
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,700;1,900&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Noto+Serif&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" media="all">
     <link href="https://cdn.datatables.net/fixedheader/3.1.6/css/fixedHeader.bootstrap.min.css" rel="stylesheet" media="all">

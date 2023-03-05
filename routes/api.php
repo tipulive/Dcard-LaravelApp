@@ -41,6 +41,7 @@ Route::middleware('auth:sanctum')->group( function () {//here is to protect mult
 Route::post('/CreateCompany','AdminController@AdminCreateCompany')->name('AdminCreateCompany');
 
 /*Company*/
+Route::get('/PrintCard','CompanyController@CompanyPrintCard')->name('CompanyPrintCard');
 Route::post('/CreateUser','CompanyController@CompanyCreateUser')->name('CompanyCreateUser');
 Route::post('/CreateUserAssign','CompanyController@CompanyCreateUserAssign')->name('CompanyCreateUserAssign');
 Route::post('/EditUserAssign','CompanyController@CompanyEditUserAssign')->name('CompanyEditUserAssign');

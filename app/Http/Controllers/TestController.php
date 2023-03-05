@@ -15,6 +15,12 @@ use App;
 class TestController extends Controller
 {
     //
+    public function submitForm(Request $request)
+{
+    auth::user();
+    // Process form submission
+    header("Location: https://example.com");
+}
     public function generateQrCode(){
         /*\QrCode::size(500)
         ->format('png')

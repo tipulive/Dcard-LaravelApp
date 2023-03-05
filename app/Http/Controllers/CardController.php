@@ -27,6 +27,19 @@ class CardController extends Controller
         $this->platform1=env('PLATFORM3');
     }
 
+    public function PrintCard($input){
+
+        $check=DB::select("select *from cards where subscriber=:subscriber",array("subscriber"=>Auth::user()->subscriber));
+
+        return response([
+            "status"=>true,
+            "result"=>$check
+
+
+        ],200);
+
+    }
+
     public function Create($input)// i will eliminate this one
     {
         $filename=Auth::user()->subscriber.""."_".Str::random(2).""."_".date(time());

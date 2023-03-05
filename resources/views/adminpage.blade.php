@@ -353,32 +353,83 @@ table th {
 
                                 </ul>
 
-                                 <!--Declaration-->
-                                 <li class="app-sidebar__heading">Declaration</li>
+
+                          <!--CardCode-->
+                          <li class="app-sidebar__heading">Card</li>
                             <li class="mm-active">
                                 <a href="#" aria-expanded="true">
-                                    <i class="metismenu-icon pe-7s-rocket"></i>items Declaration
+                                    <i class="metismenu-icon pe-7s-rocket"></i>Card
                                     <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                                 </a>
                             </li>
                                 <ul class="mm-collapse mm-show" style="">
                                     <li>
-                                        <a href="#View All Products" onclick="return CheckDeclaration()" aria-expanded="false">
-                                            <i class="metismenu-icon"></i>Create
+                                        <a href="#View All Products" onclick="return CreateMultipleCardMenu()" aria-expanded="false">
+                                            <i class="metismenu-icon"></i>Generate
                                         </a>
                                     </li>
 
                                     <li>
-                                        <a  href="#Create Product" onclick="return ViewDeclaration()" aria-expanded="false">
-                                            <i class="metismenu-icon"></i>View
+                                        <a  href="/ViewCard" aria-expanded="false">
+                                            <i class="metismenu-icon"></i>Print Card
                                         </a>
                                     </li>
 
 
                                     </ul>
 
-                                    <!--Declaration-->
+                                    <li class="app-sidebar__heading">Promotion</li>
+                            <li class="mm-active">
+                                <a href="#" aria-expanded="true">
+                                    <i class="metismenu-icon pe-7s-rocket"></i>Promotion
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                </a>
+                            </li>
+                                <ul class="mm-collapse mm-show" style="">
+                                    <li>
+                                        <a href="#View All Products" onclick="return CreatePromotionEventMenu()" aria-expanded="false">
+                                            <i class="metismenu-icon"></i>Create
+                                        </a>
+                                    </li>
 
+                                    <li>
+                                        <a  href="#Create Product" onclick="return GetAllPromotionEvent()" aria-expanded="false">
+                                            <i class="metismenu-icon"></i>View
+                                        </a>
+                                    </li>
+
+
+                                    </ul>
+                                    <li class="app-sidebar__heading">Others</li>
+                            <li class="mm-active">
+                                <a href="#" aria-expanded="true">
+                                    <i class="metismenu-icon pe-7s-rocket"></i>Others
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                </a>
+                            </li>
+                                <ul class="mm-collapse mm-show" style="">
+                                    <li>
+                                        <a href="#View All Products" onclick="return GetAllParticipateEvent()" aria-expanded="false">
+                                            <i class="metismenu-icon"></i>View Events
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a  href="#Create Product" onclick="return GetAllBonus()" aria-expanded="false">
+                                            <i class="metismenu-icon"></i>Bonus
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a  href="#Create Product" onclick="return GetAllBalance()" aria-expanded="false">
+                                            <i class="metismenu-icon"></i>Balance
+                                        </a>
+                                    </li>
+
+
+                                    </ul>
+
+                                    <!--CardCode-->
 
                                       <!--SafariCode-->
                                  <li class="app-sidebar__heading">Safari</li>
@@ -489,8 +540,6 @@ table th {
 
 
 
-</div>
-
 
 <!--Modal table-->
 
@@ -567,6 +616,226 @@ $(function() {
    //ViewSearchForm();
 
 })
+//CardCode
+function CreateMultipleCardMenu(){
+    $('.MainbigTitle').html("");
+$('.MyRequest_table').html("");
+    closeNav();
+    $('.MainForm').html(`
+    <h5 class="text-center">Generate Card</h5>
+    <form class="formDataCreate" onsubmit="return CreateMultipleCard()">
+
+<div class="form-group">
+<label>Number <span class="text-danger">*</span></label>
+<input type="text" class="form-control" name="numberQr" required/>
+</div>
+<div class="form-group">
+
+<button  class="btn btn-danger mycreateProduct" >Submit</button>
+</div>
+
+
+</form>
+    `);
+
+
+
+
+}
+function CreateMultipleCard(){//Company
+    $('.cover-spin').show();
+
+       //
+       var Usertoken=localStorage.getItem("Usertoken");
+
+   $.ajax({
+
+url:`./api/CreateMultipleCard`,
+type:'post',
+beforeSend: function (xhr) {
+xhr.setRequestHeader('Authorization', `Bearer ${Usertoken}`);
+},
+    dataType: "json",
+data:$('.formDataCreate').serialize(),
+success:function(data){
+if(data.status){//return data as true
+
+    //localStorage.setItem('Usertoken',data.token);
+ //console.log(hashfunction);
+ $('.cover-spin').hide();
+
+ //ViewAllProducts();
+
+    alert("Card generated Successfully");
+    $('.formDataCreate :input').val("");
+    $('.mycreateProduct').val("Submit");
+
+   // LoadSavedComeFrom();
+
+}
+else{
+alert("Something is wrong please contact system Admin");
+$('.cover-spin').hide();
+
+}
+
+
+
+},
+error:function(data){
+    console.log(data);
+//alert("errors occured please retry this process again or contact system Admin");
+//window.location.href = "./login";
+}
+});
+    return false;
+
+}
+
+
+function CreatePromotionEventMenu(){
+    $('.MainbigTitle').html("");
+$('.MyRequest_table').html("");
+    closeNav();
+    $('.MainForm').html(`
+    <h5 class="text-center">Create Promotion</h5>
+
+    <form class="formDataCreate" onsubmit="return CreatePromotionEvent()">
+
+<div class="form-group">
+<label> Promotion Name <span class="text-danger">*</span></label>
+<input type="text" class="form-control" name="promoName" required/>
+</div>
+<div class="form-group">
+
+<div class="form-group">
+<label>Reach<span class="text-danger">*</span></label>
+<input type="text" class="form-control Promo_reach" name="reach" value="0" required onchange="return changePromoMsg()" onkeyup="changePromoMsg()"/>
+</div>
+
+<div class="form-group">
+<label>Bonus<span class="text-danger">*</span></label>
+<input type="text" class="form-control Promo_gain" name="gain" value="0" required onchange="return changePromoMsg()" onkeyup="changePromoMsg()"/>
+</div>
+<p><span class="text-danger">First text</span> <span class="text-primary">Reach</span> <span class="text-info">second Text</span> <span class="text-success">gain</span> <span class="text-dark">third Text</span></p>
+<h6><h6 class="Promo_txtmsg text-danger">If you reach 0 i will give you 0</h6> <span class="reqclass"></span></h6>
+<hr>
+<div class="form-group">
+  <label for="exampleFormControlTextarea3">Message 1</label>
+  <textarea class="form-control Promo_msg1" name="msg1" placeholder="Enter msg1" rows="2" onchange="return changePromoMsg()" onkeyup="changePromoMsg()">If you reach</textarea>
+</div>
+
+<div class="form-group">
+  <label for="exampleFormControlTextarea3">Message 2</label>
+  <textarea class="form-control Promo_msg2" name="msg2" placeholder="Enter Comment" rows="2" onchange="return changePromoMsg()" onkeyup="changePromoMsg()">i will give you</textarea>
+</div>
+<div class="form-group">
+  <label for="exampleFormControlTextarea3">Message 2</label>
+  <textarea class="form-control Promo_msg3" name="msg2" placeholder="Enter Comment" rows="2" onchange="return changePromoMsg()" onkeyup="changePromoMsg()">i will give you</textarea>
+</div>
+<div class="form-group d-none">
+  <label for="exampleFormControlTextarea3">Message 3</label>
+  <textarea class="form-control Promo_submit" name="promoMsg" placeholder="Enter Comment" rows="7" ></textarea>
+</div>
+
+
+<div class="form-group">
+    <label for="">From Date-To</label>
+    <input type="text" class="form-control" name="extended_date" id="extended_date">
+    </div>
+
+    <div class="form-group">
+    <label for="">Choose Status</label>
+<select id="Ultra" name="status"  class="form-control">
+     <option value="on" selected>On</option>
+     <option value="off">off</option>
+
+</select>
+</div>
+
+<div class="form-group">
+
+<button  class="btn btn-danger mycreateProduct" >Submit</button>
+</div>
+
+
+</form>
+    `);
+
+
+    flatpickr('#extended_date',{
+    enableTime: true,
+  mode: "range",
+  minDate: "today",
+    dateFormat: "d-m-Y H:i:s",
+    time_24hr: true
+    //defaultDate: [start_time, end_time]
+});
+
+}
+function changePromoMsg(){
+    var Promo_reach=$('.Promo_reach').val();
+    var Promo_gain=$('.Promo_gain').val();
+    var Promo_msg1=$('.Promo_msg1').val();
+    var Promo_msg2=$('.Promo_msg2').val();
+    var Promo_msg3=$('.Promo_msg3').val();
+    $('.Promo_submit').val(`${Promo_msg1} ${Promo_reach} ${Promo_msg2} ${Promo_gain} ${Promo_msg3} `);
+    $('.Promo_txtmsg').text(`${Promo_msg1} ${Promo_reach} ${Promo_msg2} ${Promo_gain} ${Promo_msg3}`);
+
+}
+function CreatePromotionEvent(){//Company
+    $('.cover-spin').show();
+
+       //
+       var Usertoken=localStorage.getItem("Usertoken");
+
+   $.ajax({
+
+url:`./api/CreatePromotionEvent`,
+type:'post',
+beforeSend: function (xhr) {
+xhr.setRequestHeader('Authorization', `Bearer ${Usertoken}`);
+},
+    dataType: "json",
+data:$('.formDataCreate').serialize(),
+success:function(data){
+if(data.status){//return data as true
+
+    //localStorage.setItem('Usertoken',data.token);
+ //console.log(hashfunction);
+ $('.cover-spin').hide();
+
+ //ViewAllProducts();
+
+    alert("Promotion Created Successfully");
+    $('.formDataCreate :input').val("");
+    $('.mycreateProduct').val("Submit");
+
+   // LoadSavedComeFrom();
+
+}
+else{
+alert("Something is wrong please contact system Admin");
+$('.cover-spin').hide();
+
+}
+
+
+
+},
+error:function(data){
+    console.log(data);
+//alert("errors occured please retry this process again or contact system Admin");
+//window.location.href = "./login";
+}
+});
+    return false;
+
+}
+
+
+
+//CardCode
 
 //SafariCode Javascript//
 function CheckSafari(){

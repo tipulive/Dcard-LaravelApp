@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:8000/api
 @email=company@gmail.com
 @password=1
-@Auth_token=134|iSAUbdoqqZ2NnZb98VZiCAJhgy2igKWsLhW1zKEV
+@Auth_token=244|ygdCii7TkgEHjyyRmp8XZAt0Yt7iC8x8sjE7BQaI
 
 ### Company Login
 POST  {{baseUrl}}/AdminLoginEmail/
@@ -111,7 +111,20 @@ Authorization: Bearer {{Auth_token}}
 "description":"descr"
 }
 
-###Company GEt Details of Card ID or to check if he reached target
+###
+GET  http://localhost:8000/submit-form
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"Ccode":"250",
+"phone":"0782389359"
+
+
+
+}
+
+###Company GEt Details of Card ID using number this will help me to assign user with new card
 GET  {{baseUrl}}/GetNumberDetail
 content-type: application/json;charset=UTF-8
 Authorization: Bearer {{Auth_token}}
@@ -161,6 +174,11 @@ Authorization: Bearer {{Auth_token}}
 
 
 }
+### print card
+GET  {{baseUrl}}/PrintCard
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
 ###Company Create Card single card depricated
 POST  {{baseUrl}}/CreateCard
 content-type: application/json;charset=UTF-8
@@ -215,8 +233,7 @@ Authorization: Bearer {{Auth_token}}
 "promoMsg":"i will give you 300 nugura ibintu bya 1000$",
 "reach":"1200",
 "gain":"350",
-"started_date":"22/02/2023",
-"ended_date":"23/02/2023",
+"extended_date":"15-03-2023 12:00:0 to 24-03-2023 12:00:0",
 "status":"On"
 
 }
