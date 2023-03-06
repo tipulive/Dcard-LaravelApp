@@ -141,11 +141,12 @@ else{
 
     }
     public function UpdateMethodParticipated($input,$inputDB,$status){//this method will update
-        $check2=DB::update("update participateds set status='$status',inputData=$inputDB where uid=:uid and uidUser=:uidUser and subscriber=:subscriber limit 1",array(
+        $check2=DB::update("update participateds set status='$status',updated_at=:updated_at,inputData=$inputDB where uid=:uid and uidUser=:uidUser and subscriber=:subscriber limit 1",array(
             "uid"=>$input['uid'],
             //"carduid"=>$input['carduid'],
             "uidUser"=>$input['uidUser'],
-            "subscriber"=>Auth::user()->subscriber
+            "subscriber"=>Auth::user()->subscriber,
+            "updated_at"=>$this->today,
         ));
         return $check2;
     }
@@ -159,7 +160,8 @@ else{
         "inputData"=>$inputDB,
 //"carduid"=>$input["carduid"],
         "uidCreator"=>Auth::user()->uid,
-        "created_at"=>$this->today
+        "created_at"=>$this->today,
+        "updated_at"=>$this->today,
         ]);
         return $check2;
 
@@ -291,9 +293,10 @@ if($check)
     public function GetAllParticipateEvent($input)//All
 
 {
+    $LimitStart=$input["LimitStart"]??0;
+    $LimitEnd=$input["LimitEnd"]??10;
 
-
-            $check=DB::select("select *from participateds where uidUser=:uidUser and subscriber=:subscriber limit 100",array(
+            $check=DB::select("select *from participateds where uidUser=:uidUser and subscriber=:subscriber order by updated_at desc limit $LimitStart,$LimitEnd",array(
                  "uidUser"=>$input["uidUser"],
                 "subscriber"=>Auth::user()->subscriber
             ));
@@ -324,10 +327,11 @@ if($check)
     public function GetActiveParticipateEvent($input)//
     {
 
+        $LimitStart=$input["LimitStart"]??0;
+        $LimitEnd=$input["LimitEnd"]??10;
 
 
-
-            $check=DB::select("select *from participateds where uidUser=:uidUser and subscriber=:subscriber and status!='reached' limit 100",array(
+            $check=DB::select("select *from participateds where uidUser=:uidUser and subscriber=:subscriber and status!='reached' limit $LimitStart,$LimitEnd",array(
                  "uidUser"=>$input["uidUser"],
                 "subscriber"=>Auth::user()->subscriber
             ));
@@ -357,9 +361,10 @@ if($check)
     public function GetReachedParticipateEvent($input)//Reached
 
     {
+        $LimitStart=$input["LimitStart"]??0;
+        $LimitEnd=$input["LimitEnd"]??10;
 
-
-                $check=DB::select("select *from participateds where uidUser=:uidUser and subscriber=:subscriber and status='reached' limit 100",array(
+                $check=DB::select("select *from participateds where uidUser=:uidUser and subscriber=:subscriber and status='reached' limit $LimitStart,$LimitEnd",array(
                      "uidUser"=>$input["uidUser"],
                     "subscriber"=>Auth::user()->subscriber
                 ));

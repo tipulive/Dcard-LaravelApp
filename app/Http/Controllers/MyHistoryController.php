@@ -107,9 +107,16 @@ public function BalanceHistUser($input)// and Bonus too
 {
     $LimitStart=$input["LimitStart"]??0;
     $LimitEnd=$input["LimitEnd"]??10;
-    $check=DB::select("select *from topup_histories where uid=:uid limit $LimitStart,$LimitEnd",array(
+    $option=strtolower($input["optionCase"])??'';
+    $optionData=($option=="balance"|| $option=="bonus")?$option:'';
+    //$optionCase=($option=="balance")?"and balance!='0'":($option=="bonus")?"and bonus!='0'":$option;
+    $optionCase=($optionData=="balance")?"and balance!='0'":(($optionData=="bonus")?"and bonus!='0'":$optionData);
+    $check=DB::select("select *from topup_histories where uid=:uid $optionCase order by created_at desc limit $LimitStart,$LimitEnd",array(
         "uid"=>$input["uid"],
     ));
+   /* $check=DB::select("select *from products limit $LimitStart,$LimitEnd",array(
+       // "uid"=>$input["uid"],
+    ));*/
     if($check)
     {
         return response([
@@ -144,7 +151,8 @@ $check=DB::table("participated_hists")
 'actionName'=>$action,
 //"carduid"=>$input["carduid"],
 "uidCreator"=>Auth::user()->uid,
-"created_at"=>$this->today
+"created_at"=>$this->today,
+"updated_at"=>$this->today
 ]);
 
 if($check)
@@ -159,7 +167,9 @@ else{
 }
 public function GetParticipatedHist($input)
 {
-    $check=DB::select("select *from participated_hists where uid=:uid and uidUser=:uidUser order by id desc",array(
+    $LimitStart=$input["LimitStart"]??0;
+    $LimitEnd=$input["LimitEnd"]??10;
+    $check=DB::select("select *from participated_hists where uid=:uid and uidUser=:uidUser order by id desc limit $LimitStart,$LimitEnd",array(
        "uid"=>$input["uid"],
        "uidUser"=>$input["uidUser"]
     ));

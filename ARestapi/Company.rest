@@ -169,7 +169,8 @@ Authorization: Bearer {{Auth_token}}
 {
 "uid":"kebineericMuna_1668935593",
 "LimitStart":0,
-"LimitEnd":3
+"LimitEnd":10,
+"optionCase":"bonus"
 
 
 
@@ -292,7 +293,9 @@ content-type: application/json;charset=UTF-8
 Authorization: Bearer {{Auth_token}}
 
 {
-"uidUser":"kebineericMuna_1668935593"
+"uidUser":"kebineericMuna_1668935593",
+"LimitStart":0,
+"LimitEnd":10
 
 
 }
@@ -313,7 +316,9 @@ content-type: application/json;charset=UTF-8
 Authorization: Bearer {{Auth_token}}
 
 {
-"uidUser":"kebineericMuna_1668935593"
+"uidUser":"kebineericMuna_1668935593",
+"LimitStart":0,
+"LimitEnd":10
 
 
 }
@@ -324,7 +329,9 @@ content-type: application/json;charset=UTF-8
 Authorization: Bearer {{Auth_token}}
 
 {
-"uidUser":"kebineericMuna_1668935593"
+"uidUser":"kebineericMuna_1668935593",
+"LimitStart":0,
+"LimitEnd":10
 
 
 }
@@ -337,7 +344,9 @@ Authorization: Bearer {{Auth_token}}
 
 {
 "uid":"kivuBucket_1672353285",
-"uidUser":"kebineericMuna_1674160265"
+"uidUser":"kebineericMuna_1674160265",
+"LimitStart":0,
+"LimitEnd":3
 
 
 }
