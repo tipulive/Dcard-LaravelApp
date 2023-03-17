@@ -392,4 +392,432 @@ if($check)
 
         }
 
+        /*Quick Bonus Code */
+
+        public function CheckQuickBonus($input)
+        {
+            //this is to check if there is open QuickBonus Opened with Same Bonus Type,if is Available request to overide instead of recreating it again
+            $bonusType=$input['bonusType'];
+            $check=DB::select("select productName from quickbonuses where subscriber=:subscriber and status='on' and bonusType='$bonusType' limit 1"
+            ,array(
+                "subscriber"=>Auth::user()->subscriber
+        ));
+
+            if($check)
+            {
+
+             return response([
+                 "status"=>true,
+                 "count"=>count($check),
+                 "result"=>$check
+
+
+             ],200);
+            }
+            else{
+             return response([
+                 "status"=>false,
+                 "result"=>$check,
+
+             ],200);
+            }
+        }
+        public function SetupQuickBonus($input){
+            //note here i am gonna use Api to get product Details
+
+            $bonusValue=($input['bonusType']=='Gift')?$input['giftPerPcs']:$input['bonusValue'];
+            $check=DB::table("quickbonuses")
+            ->insert([
+            "productName"=>$input["productName"],
+            "qty"=>$input['qty'],
+            "price"=>$input['price'],
+            "status"=>$input['status']??'on',//on or off
+            "bonusType"=>$input['bonusType'],//Gift or Money
+            "giftName"=>$input['giftName']??'none',//codeName of Carton
+            "giftValues"=>$input['giftValues']??'none',//per Carton
+            "giftPerPcs"=>$input['giftPerPcs']??'none',//price per 1 pieces
+            "giftMin"=>$input['giftMin']??'1',//Min gift you can give to client
+            "moneyMin"=>$input['moneyMin']??'1',//Money Minimum
+            "bonusValue"=>$bonusValue,//Bonus Value per 1 pcs means if is gift BonusValue=giftPerPcs
+            "subscriber"=>Auth::user()->subscriber,
+            "uidCreator"=>Auth::user()->uid,
+            "description"=>$input["description"],
+            "created_at"=>$this->today,
+            "updated_at"=>$this->today,
+            ]);
+            if($check)
+            {
+
+             return response([
+                 "status"=>true,
+                 "count"=>$check,
+                 "result"=>$check
+
+
+             ],200);
+            }
+            else{
+             return response([
+                 "status"=>false,
+                 "result"=>$check,
+
+             ],200);
+            }
+        }
+        public function GetAllQuickBonus($input){
+            $LimitStart=$input["LimitStart"]??0;
+    $LimitEnd=$input["LimitEnd"]??10;
+
+            $check=DB::select("select *from quickbonuses where subscriber=:subscriber  limit $LimitStart,$LimitEnd",array(
+                "subscriber"=>Auth::user()->subscriber
+            ));
+
+            if($check)
+            {
+
+                /*DB::table("testlimitdata")
+                ->insert([
+                    "limitstart"=>$LimitStart,
+                    "limitend"=>$LimitEnd
+                ]);*/
+             return response([
+                 "status"=>true,
+                 "count"=>count($check),
+                 "result"=>$check
+
+
+             ],200);
+            }
+            else{
+             return response([
+                 "status"=>false,
+                 "result"=>$check,
+
+             ],200);
+            }
+
+        }
+        public function SearchQuickBonus($input){
+            $productName=$input["productName"];
+            $check=DB::select("select *from quickbonuses where subscriber=:subscriber and status='on' and productName Like '%$productName%'  limit 10",array(
+                //"productName"=>$input["productName"],
+                "subscriber"=>Auth::user()->subscriber
+            ));
+
+            if($check)
+            {
+
+             return response([
+                 "status"=>true,
+                 "count"=>count($check),
+                 "result"=>$check
+
+
+             ],200);
+            }
+            else{
+             return response([
+                 "status"=>false,
+                 "result"=>$check,
+
+             ],200);
+            }
+        }
+        public function SubmitQuickBonus($input){//user submit Data from Mobile Device
+
+
+                $uid=preg_replace('/[^A-Za-z0-9-]/','',"Quick");
+                $uid=$uid.""."_".date(time());
+                $uidForm=($input["uid"]==='none')?$uid:$input["uid"];
+                $check=DB::table("quickbosubmits")
+                ->insert([
+                "uid"=>$uidForm,
+                "uidUser"=>$input["uidUser"],
+                "productName"=>$input["productName"],
+                "qty"=>$input['qty'],
+                "price"=>$input['price'],
+                "total"=>$input['qty']*$input['price'],//total qty*price
+                "status"=>$input['status']??'on',//close to check available on this card
+                "bonusType"=>$input['bonusType'],//Gift or Money
+                "giftName"=>$input['giftName']??'none',//codeName of Carton//if giftName is 'none' it means that there is no gift involved
+                "giftPcs"=>$input['giftPcs']??'none',//tot pcs
+                "bonusValue"=>$input['bonusValue']??'none',//Bonus value per pcs
+                "totBonusValue"=>$input['totBonusValue']??'none',//Total bonus value i.e:bonusValue*giftPcs
+                "subscriber"=>Auth::user()->subscriber,
+                "uidCreator"=>Auth::user()->uid,
+                "description"=>$input["description"]??'none',
+                "created_at"=>$this->today,
+                "updated_at"=>$this->today,
+                ]);
+                if($check)
+                {
+
+
+
+                 return response([
+                     "status"=>true,
+                     "result"=>$check,
+                     "uid"=>(strtolower($input["status"])=="confirm")?"none":$uid
+
+
+                 ],200);
+                }
+                else{
+                 return response([
+                     "status"=>false,
+                     "result"=>$check,
+
+                 ],200);
+                }
+
+
+
+        }
+
+        public function UpdateSubmitQuickBonus($input){//Update user submit Data from Mobile Device
+
+
+            $check=DB::update("update quickbosubmits set qty=:qty,price=:price,total=:total,giftPcs=:giftPcs,bonusValue=:bonusValue,totBonusValue=:totBonusValue,updated_at=:updated_at,uidCreator=:uidCreator where id=:id and subscriber=:subscriber limit 1",array(
+            "id"=>$input["id"],
+            "qty"=>$input['qty'],
+            "price"=>$input['price'],
+            "total"=>$input['qty']*$input['price'],//total qty*price
+            "giftPcs"=>$input['giftPcs']??'none',//tot pcs
+            "bonusValue"=>$input['bonusValue']??'none',//Bonus value per pcs
+            "totBonusValue"=>$input['totBonusValue']??'none',//Total bonus value i.e:bonusValue*giftPcs
+            "subscriber"=>Auth::user()->subscriber,
+            "uidCreator"=>Auth::user()->uid,
+
+
+            "updated_at"=>$this->today,
+
+            ));
+
+            if($check)
+            {
+
+             return response([
+                 "status"=>true,
+                 //"uid"=>$uid,
+                 "result"=>$check
+
+
+             ],200);
+            }
+            else{
+             return response([
+                 "status"=>false,
+                 "result"=>$check,
+
+             ],200);
+            }
+
+
+
+    }
+        public function ConfirmAllSubmitQuickBonus($input)
+        {
+            $check=DB::update("update quickbosubmits set status='confirm',uidCreator=:uidCreator where uid=:uid and status='on' and subscriber=:subscriber  limit 100",array(
+                "uid"=>$input["uid"],
+                "uidCreator"=>Auth::user()->uid,
+                "subscriber"=>Auth::user()->subscriber
+            ));
+            if($check)
+            {
+
+             return response([
+                 "status"=>true,
+                 //"count"=>count($check),
+                 "result"=>$check
+
+
+             ],200);
+            }
+            else{
+             return response([
+                 "status"=>false,
+                 "result"=>$check,
+
+             ],200);
+            }
+        }
+        public function ConfirmOnlySubmitQuickBonus($input)
+        {
+            $check=DB::update("update quickbosubmits set status='confirm',uidCreator=:uidCreator where id=:id and subscriber=:subscriber limit 1",array(
+                "id"=>$input["id"],
+                "uidCreator"=>Auth::user()->uid,
+                "subscriber"=>Auth::user()->subscriber
+            ));
+            if($check)
+            {
+
+             return response([
+                 "status"=>true,
+                 //"count"=>count($check),
+                 "result"=>$check
+
+
+             ],200);
+            }
+            else{
+             return response([
+                 "status"=>false,
+                 "result"=>$check,
+
+             ],200);
+            }
+        }
+
+        public function SearchSubmitQuickBonus($input){//
+
+            $LimitStart=$input["LimitStart"]??0;
+            $LimitEnd=$input["LimitEnd"]??10;
+            $product=$input['productName']??'';
+            $productName=($product!='')?"and productName Like '%$product%' limit 10":"order by id desc limit $LimitStart,$LimitEnd";
+
+
+            $check=DB::select("select *from quickbosubmits where uidUser=:uidUser and subscriber=:subscriber and status='on' $productName",array(
+                "uidUser"=>$input["uidUser"],
+                "subscriber"=>Auth::user()->subscriber
+            ));
+
+
+                    if($check)
+                    {
+
+                     return response([
+                         "status"=>true,
+                         "count"=>count($check),
+                         "result"=>$check
+
+
+                     ],200);
+                    }
+                    else{
+                     return response([
+                         "status"=>false,
+                         "result"=>$check,
+
+                     ],200);
+                    }
+
+
+        }
+        public function GetUidSubmitQuickBonus($input){//
+
+
+
+
+
+            $check=DB::select("select *from quickbosubmits where uidUser=:uidUser and subscriber=:subscriber and status='on' limit 100",array(
+                "uidUser"=>$input["uidUser"],
+                "subscriber"=>Auth::user()->subscriber
+            ));
+
+
+                    if($check)
+                    {
+
+                     return response([
+                         "status"=>true,
+                         "count"=>count($check),
+                         "uid"=>$check[0]->uid,
+
+
+                     ],200);
+                    }
+                    else{
+                     return response([
+                         "status"=>false,
+                         "result"=>$check,
+
+                     ],200);
+                    }
+
+
+        }
+        public function DeleteAllSubmitQuickBonus($input)
+        {
+            $check=DB::delete("delete from quickbosubmits where uid=:uid and uidUser=:uidUser and subscriber=:subscriber limit 100",array(
+                "uid"=>$input["uid"],
+                "uidUser"=>$input["uidUser"],
+                "subscriber"=>Auth::user()->subscriber
+            ));
+            if($check)
+            {
+
+             return response([
+                 "status"=>true,
+                 "result"=>$check
+
+
+             ],200);
+            }
+            else{
+             return response([
+                 "status"=>false,
+                 "result"=>$check,
+
+             ],200);
+            }
+        }
+        public function DeleteOnlySubmitQuickBonus($input)
+        {
+            $check=DB::delete("delete from quickbosubmits where id=:id and uidUser=:uidUser and subscriber=:subscriber limit 1",array(
+                "id"=>$input["id"],
+                "uidUser"=>$input["uidUser"],
+                "subscriber"=>Auth::user()->subscriber
+            ));
+            if($check)
+            {
+
+             return response([
+                 "status"=>true,
+                 "result"=>$check
+
+
+             ],200);
+            }
+            else{
+             return response([
+                 "status"=>false,
+                 "result"=>$check,
+
+             ],200);
+            }
+        }
+
+        public function GetAllSubmitQuickBonus($input){//not yet finish submit
+
+            $LimitStart=$input["LimitStart"]??0;
+            $LimitEnd=$input["LimitEnd"]??10;
+
+                    $check=DB::select("select *from quickbosubmits where subscriber=:subscriber  limit $LimitStart,$LimitEnd",array(
+                        "subscriber"=>Auth::user()->subscriber
+                    ));
+
+                    if($check)
+                    {
+
+                     return response([
+                         "status"=>true,
+                         "count"=>count($check),
+                         "result"=>$check
+
+
+                     ],200);
+                    }
+                    else{
+                     return response([
+                         "status"=>false,
+                         "result"=>$check,
+
+                     ],200);
+                    }
+
+
+        }
+
+        /*Quick Bonus Code */
+
 }

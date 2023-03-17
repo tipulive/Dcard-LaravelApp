@@ -74,6 +74,21 @@ Route::post('/RedeemBonus','CompanyController@CompanyTopupRedeemBonus')->name('C
 Route::get('/GetBalanceUser','CompanyController@CompanyTopupBalanceUser')->name('CompanyTopupBalanceUser');
 Route::get('/GetBalanceHist','CompanyController@CompanyTopupBalanceHistUser')->name('CompanyTopupBalanceHistUser');
 
+/*Quickie Bonus */
+Route::post('/SetupQuickBonus','CompanyController@CompanyPartSetupQuickBonus')->name('CompanyPartSetupQuickBonus');
+Route::get('/GetAllQuickBonus','CompanyController@CompanyPartGetAllQuickBonus')->name('CompanyPartGetAllQuickBonus');
+Route::get('/SearchQuickBonus','CompanyController@CompanyPartSearchQuickBonus')->name('CompanyPartSearchQuickBonus');
+Route::get('/SubmitQuickBonus','CompanyController@CompanyPartSubmitQuickBonus')->name('CompanyPartSubmitQuickBonus');
+Route::get('/UpdateSubmitQuickBonus','CompanyController@CompanyPartUpdateSubmitQuickBonus')->name('CompanyPartUpdateSubmitQuickBonus');
+Route::get('/ConfirmAllSubmitQuickBonus','CompanyController@CompanyPartConfirmAllSubmitQuickBonus')->name('ConfirmAllSubmitQuickBonus');
+Route::get('/ConfirmOnlySubmitQuickBonus','CompanyController@CompanyPartConfirmOnlySubmitQuickBonus')->name('ConfirmOnlySubmitQuickBonus');
+Route::get('/SearchSubmitQuickBonus','CompanyController@CompanyPartSearchSubmitQuickBonus')->name('CompanyPartSearchSubmitQuickBonus');
+Route::get('/GetUidSubmitQuickBonus','CompanyController@CompanyPartGetUidSubmitQuickBonus')->name('CompanyPartGetUidSubmitQuickBonus');
+Route::get('/DeleteAllSubmitQuickBonus','CompanyController@CompanyPartDeleteAllSubmitQuickBonus')->name('CompanyPartDeleteAllSubmitQuickBonus');
+Route::get('/DeleteOnlySubmitQuickBonus','CompanyController@CompanyPartDeleteOnlySubmitQuickBonus')->name('CompanyPartDeleteOnlySubmitQuickBonus');
+Route::get('/GetAllSubmitQuickBonus','CompanyController@CompanyPartGetAllSubmitQuickBonus')->name('CompanyPartGetAllSubmitQuickBonus');
+Route::get('/CheckQuickBonus','CompanyController@CompanyPartCheckQuickBonus')->name('CompanyPartCheckQuickBonus');
+
 /*safari*/
 Route::get('/SafariGetAll','CompanyController@CompanySafariGetAll')->name('CompanySafariGetAll');
 Route::post('/SafariCreate','CompanyController@CompanySafariCreate')->name('CompanySafariCreate');

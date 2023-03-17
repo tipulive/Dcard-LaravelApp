@@ -400,6 +400,29 @@ table th {
 
 
                                     </ul>
+                                    <!--Quick Bonus -->
+                                    <li class="mm-active">
+                                <a href="#" aria-expanded="true">
+                                    <i class="metismenu-icon pe-7s-rocket"></i>Quick Bonus
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                </a>
+                            </li>
+                                <ul class="mm-collapse mm-show" style="">
+                                    <li>
+                                        <a href="#Setup Bonus" onclick="return SetupQuickBonusMenu()" aria-expanded="false">
+                                            <i class="metismenu-icon"></i>Setup Bonus
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a  href="#Create Product" onclick="return GetAllPromotionEvent()" aria-expanded="false">
+                                            <i class="metismenu-icon"></i>View
+                                        </a>
+                                    </li>
+
+
+                                    </ul>
+                                    <!--Quick Bonus -->
                                     <li class="app-sidebar__heading">Others</li>
                             <li class="mm-active">
                                 <a href="#" aria-expanded="true">
@@ -607,6 +630,7 @@ table th {
 
 <script>
 //search page
+
 
 
 $(function() {
@@ -836,6 +860,242 @@ error:function(data){
 
 
 //CardCode
+
+//Quickie Bonus //
+function SetupQuickBonusMenu(){
+
+    $('.Gift').hide();
+      $('.Money').show();
+    $('.MainbigTitle').html("");
+$('.MyRequest_table').html("");
+    closeNav();
+    $('.MainForm').html(`
+    <h5 class="text-center">Setup Quick Bonus</h5>
+
+    <form class="formDataCreate" onsubmit="return SetupQuickBonus()">
+
+<div class="form-group">
+<label> Product Name <span class="text-danger">*</span></label>
+<input type="text" class="form-control" name="productName" required/>
+</div>
+
+<div class="form-group">
+<label>Price<span class="text-danger">*</span></label>
+<input type="text" class="form-control" name="price" value="0" required />
+</div>
+<div class="form-group">
+    <label for="">Choose Bonus Type</label>
+<select id="Ultra" name="bonusType"  class="form-control" onchange="return CheckQuickBonus(this)">
+
+     <option value="Money" selected>Money</option>
+     <option value="Gift" >Gift</option>
+
+</select>
+</div>
+
+<p class="text-danger">Bonus Calculator</p>
+<div class="form-group">
+<label>Qty <span class="text-danger">*</span></label>
+<input type="text" class="form-control bonusQty" name="qty" value="0" required />
+</div>
+
+<div class="Money">
+
+
+<div class="form-group">
+<label>Bonus in USD<span class="text-danger">*</span></label>
+<input type="text" class="form-control" value="0" required onchange="return BonusValueCalcul(this)" onkeyup="BonusValueCalcul(this)" placeholder="Enter Bonus you will give him for that Qty"/>
+</div>
+
+<div class="form-group">
+<label>Bonus Value Per Pc in USD<span class="text-danger">*</span></label>
+<input type="text" class="form-control bonusValue" name="bonusValue" value="0" required />
+</div>
+
+<div class="form-group">
+<label>Minimum Price<span class="text-danger">*</span></label>
+<input type="text" class="form-control " name="moneyMin" value="0" required />
+</div>
+</div>
+<div class="Gift">
+<div class="form-group">
+<label>Gift Name<span class="text-danger">*</span></label>
+<input type="text" class="form-control " name="giftName" value="0" required />
+</div>
+
+
+<div class="form-group">
+<label>Stock Price<span class="text-danger">*</span></label>
+<input type="text" class="form-control " name="giftValues" value="0" required />
+</div>
+
+<div class="form-group">
+<label>Bonus <span class="text-danger">*</span></label>
+<input type="text" class="form-control" value="0" required onchange="return giftBonusValueCalcul(this)" onkeyup="giftBonusValueCalcul(this)" placeholder="Enter Bonus you will give him for that Qty"/>
+</div>
+
+<div class="form-group">
+<label>Bonus Value Per Pc in USD<span class="text-danger">*</span></label>
+<input type="text" class="form-control giftPerPcs" name="giftPerPcs" value="0" required />
+</div>
+
+<div class="form-group">
+<label>Minimum Gift<span class="text-danger">*</span></label>
+<input type="text" class="form-control " name="giftMin" value="0" required />
+</div>
+</div>
+
+<div class="form-group">
+  <label for="exampleFormControlTextarea3">Description</label>
+  <textarea class="form-control Promo_msg1" name="description" placeholder="Enter msg1" rows="2" onchange="return changePromoMsg()" onkeyup="changePromoMsg()">If you reach</textarea>
+</div>
+
+
+<div class="form-group">
+
+<button  class="btn btn-danger mycreateProduct" >Submit</button>
+</div>
+
+
+</form>
+    `);
+
+
+
+
+}
+function checkGiftMoney(thisData)
+{
+    if(thisData.value=='Gift')
+    {
+      $('.Gift').show();
+      $('.Money').hide();
+    }
+    else{
+    $('.Gift').hide();
+      $('.Money').show();
+    }
+
+}
+function CheckQuickBonus(thisData){
+ console.log(thisData.value);
+
+
+ checkGiftMoney(thisData);
+
+
+    var Usertoken=localStorage.getItem("Usertoken");
+
+$.ajax({
+
+url:`./api/CheckQuickBonus`,
+type:'get',
+headers: {
+    "Content-Type": "application/json;charset=UTF-8",
+    "Authorization": `Bearer ${Usertoken}`
+},
+data:{
+    bonusType:thisData.value,
+},
+
+success:function(data){
+
+
+if(data.status){//return data as true
+
+
+var resultData=data.result;
+
+
+$('.MainbigTitle').html(`
+<h5 class="text-center"> Safaris</h5>
+`);
+$('.MyRequest_table').html("");
+
+}
+else{
+    /*$('.autoCompleteTopItem').html("");
+    $('.autoCompleteTopItem').hide();*/
+
+}
+
+
+
+},
+error:function(data){
+//alert("errors occured please retry this process again or contact system Admin");
+//window.location.href = "./login";
+}
+});
+return false;
+
+
+}
+
+function BonusValueCalcul(thisData)
+{
+    var bonusQty=$('.bonusQty').val();//as reference qty
+    $('.bonusValue').val(parseInt(thisData.value)/parseInt(bonusQty));
+
+
+}
+function giftBonusValueCalcul(thisData)
+{
+    var bonusQty=$('.bonusQty').val();
+    $('.giftPerPcs').val(parseInt(thisData.value)/parseInt(bonusQty));
+
+}
+
+function SetupQuickBonus(){//Company
+    $('.cover-spin').show();
+
+       //
+       var Usertoken=localStorage.getItem("Usertoken");
+
+   $.ajax({
+
+url:`./api/SetupQuickBonus`,
+type:'post',
+beforeSend: function (xhr) {
+xhr.setRequestHeader('Authorization', `Bearer ${Usertoken}`);
+},
+    dataType: "json",
+data:$('.formDataCreate').serialize(),
+success:function(data){
+if(data.status){//return data as true
+
+    //localStorage.setItem('Usertoken',data.token);
+ //console.log(hashfunction);
+ $('.cover-spin').hide();
+
+ //ViewAllProducts();
+
+    alert("Promotion Created Successfully");
+    $('.formDataCreate :input').val("");
+    $('.mycreateProduct').val("Submit");
+
+   // LoadSavedComeFrom();
+
+}
+else{
+alert("Something is wrong please contact system Admin");
+$('.cover-spin').hide();
+
+}
+
+
+
+},
+error:function(data){
+    console.log(data);
+//alert("errors occured please retry this process again or contact system Admin");
+//window.location.href = "./login";
+}
+});
+    return false;
+
+}
+//Quickie Bonus //
 
 //SafariCode Javascript//
 function CheckSafari(){

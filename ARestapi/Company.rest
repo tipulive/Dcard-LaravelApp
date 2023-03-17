@@ -45,7 +45,7 @@ Authorization: Bearer {{Auth_token}}
 "carduid":"TEALTD_7hEnj_1672352175"
 
 }
-###Edit User and Assign With Card iyi niyo nyayo ikora neza
+###Edit User and Assign With Card iyi niyo nyayo ikora neza Auth User Register
 POST  {{baseUrl}}/EditUserAssign
 content-type: application/json;charset=UTF-8
 Authorization: Bearer {{Auth_token}}
@@ -350,6 +350,107 @@ Authorization: Bearer {{Auth_token}}
 
 
 }
+
+### Quick Bonus
+
+### GetAllQuickBonus
+GET  {{baseUrl}}/GetAllQuickBonus
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"LimitStart":0,
+"LimitEnd":10
+
+
+}
+### Search QuickBonus
+GET  {{baseUrl}}/SearchQuickBonus
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"productName":"bi"
+
+
+
+}
+
+### SubmitQuickBonus
+GET  {{baseUrl}}/SubmitQuickBonus
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uid":"Quick_1678918381",
+ "uidUser":"juma",
+ "productName":"Nyota",
+ "qty":"5",
+ "price":"400",
+ "status":"none",
+ "bonusType":"Gift",
+ "giftName":"PO-4",
+ "giftPcs":"45",
+ "bonusValue":"50",
+ "totBonusValue":"60",
+ "description":"gh"
+
+
+
+}
+
+### SubmitQuickBonus this is updatec cart Order
+GET  {{baseUrl}}/UpdateSubmitQuickBonus
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+ "uidUser":"juma",
+ "id":"8",
+ "productName":"Nyota",
+ "qty":"5",
+ "price":"400",
+ "status":"confirm",
+ "bonusType":"Gift",
+ "giftName":"PO-4",
+ "giftPcs":"45",
+ "bonusValue":"50",
+ "totBonusValue":"60",
+ "description":"gh"
+
+
+
+}
+
+### SearchSubmitQuickBonus
+GET  {{baseUrl}}/SearchSubmitQuickBonus
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+ "uidUser":"juma",
+ "productName":"nyota"
+
+
+
+
+}
+
+### Search By uid SubmitQuickBonus
+GET  {{baseUrl}}/GetUidSubmitQuickBonus
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+ "uidUser":"juma",
+ "productName":"nyota"
+
+
+
+
+}
+
+
 
 ###Safari
 

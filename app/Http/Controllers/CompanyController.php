@@ -1256,7 +1256,406 @@ public function CompanySafariCalculate(Request $request){
 
 
 
+
+
     }
+     /*Quick Bonus Code */
+     public function CompanyPartCheckQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->CheckQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+
+     public function CompanyPartSetupQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->SetupQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+
+    public function CompanyPartGetAllQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->GetAllQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+    public function CompanyPartSearchQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->SearchQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+    public function CompanyPartSubmitQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->SubmitQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+    public function CompanyPartUpdateSubmitQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->UpdateSubmitQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+
+    public function CompanyPartConfirmAllSubmitQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->ConfirmAllSubmitQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+    public function CompanyPartConfirmOnlySubmitQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->ConfirmOnlySubmitQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+    public function CompanyPartSearchSubmitQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->SearchSubmitQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+    public function CompanyPartGetUidSubmitQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->GetUidSubmitQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+
+    public function CompanyPartDeleteAllSubmitQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->DeleteAllSubmitQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+    public function CompanyPartDeleteOnlySubmitQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->DeleteOnlySubmitQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+
+    public function CompanyPartGetAllSubmitQuickBonus(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->GetAllSubmitQuickBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+    }
+        /*Quick Bonus Code */
 
 
 }
