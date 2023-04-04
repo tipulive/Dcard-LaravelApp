@@ -1065,6 +1065,37 @@ public function CompanySafariCalculate(Request $request){
         }
 
     }
+    public function CompanyGetAllParticipatedHist(Request $request){
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new MyHistoryController)->GetAllParticipatedHist($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+
+    }
     public function CompanyTopupUser(Request $request){//add money to your country
         if(Auth::check())
         {

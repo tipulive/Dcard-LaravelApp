@@ -169,9 +169,46 @@ public function GetParticipatedHist($input)
 {
     $LimitStart=$input["LimitStart"]??0;
     $LimitEnd=$input["LimitEnd"]??10;
+
     $check=DB::select("select *from participated_hists where uid=:uid and uidUser=:uidUser order by id desc limit $LimitStart,$LimitEnd",array(
        "uid"=>$input["uid"],
        "uidUser"=>$input["uidUser"]
+    ));
+
+    if($check)
+    {
+
+     return response([
+         "status"=>true,
+         "count"=>count($check),
+         "result"=>$check
+
+
+     ],200);
+    }
+    else{
+     return response([
+         "status"=>false,
+         "result"=>$check,
+
+     ],200);
+    }
+}
+public function GetAllParticipatedHist($input)
+{
+    $LimitStart=$input["LimitStart"]??0;
+    $LimitEnd=$input["LimitEnd"]??10;
+
+
+
+    /*$check=DB::select("select *from participated_hists where subscriber=:subscriber order by id desc limit $LimitStart,$LimitEnd",array(
+       "subscriber"=>Auth::user()->subscriber
+
+    ));*/
+    $check=DB::select("SELECT participated_hists.id,participated_hists.uid,promotions.promoName,promotions.gain,promotions.reach,participated_hists.inputData,participated_hists.created_at,users.name FROM participated_hists
+    INNER JOIN users INNER JOIN promotions ON participated_hists.subscriber=:subscriber and participated_hists.uid=promotions.uid and participated_hists.uidUser=users.uid order by participated_hists.id desc limit $LimitStart,$LimitEnd",array(
+
+        "subscriber"=>Auth::user()->subscriber
     ));
 
     if($check)

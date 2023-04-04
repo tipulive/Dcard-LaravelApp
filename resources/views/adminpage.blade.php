@@ -862,6 +862,7 @@ error:function(data){
 //CardCode
 
 //Quickie Bonus //
+
 function SetupQuickBonusMenu(){
 
     $('.Gift').hide();
@@ -874,14 +875,18 @@ $('.MyRequest_table').html("");
 
     <form class="formDataCreate" onsubmit="return SetupQuickBonus()">
 
-<div class="form-group">
+<div class="form-group right-inner-addon">
 <label> Product Name <span class="text-danger">*</span></label>
-<input type="text" class="form-control" name="productName" required/>
+<input type="text" class="form-control productCodeClass"  autocomplete="off" onkeyup="autoCompleteQuickBonus(this)" name="productName" required/>
+<span class="autocompleteIcon"><i class="fas fa-exclamation-triangle text-danger"></i></span>
 </div>
+<ul class="list-group  autoCompleteTopItem">
+
+</ul>
 
 <div class="form-group">
 <label>Price<span class="text-danger">*</span></label>
-<input type="text" class="form-control" name="price" value="0" required />
+<input type="text" class="form-control productCodePriceClass" name="price" value="0" required />
 </div>
 <div class="form-group">
     <label for="">Choose Bonus Type</label>
@@ -918,15 +923,20 @@ $('.MyRequest_table').html("");
 </div>
 </div>
 <div class="Gift">
-<div class="form-group">
+<div  class="form-group right-inner-addon">
 <label>Gift Name<span class="text-danger">*</span></label>
-<input type="text" class="form-control " name="giftName" value="0" required />
+<input type="text" class="form-control productCodeGiftClass"  autocomplete="off" onkeyup="autoCompleteGiftQuickBonus(this)" name="giftName" value="0" required />
+<span class="autocompleteGiftIcon"><i class="fas fa-exclamation-triangle text-danger"></i></span>
 </div>
+
+<ul class="list-group  autoCompleteGiftTopItem">
+
+</ul>
 
 
 <div class="form-group">
 <label>Stock Price<span class="text-danger">*</span></label>
-<input type="text" class="form-control " name="giftValues" value="0" required />
+<input type="text" class="form-control productGiftPriceClass" name="giftValues" value="0" required />
 </div>
 
 <div class="form-group">
@@ -964,6 +974,144 @@ $('.MyRequest_table').html("");
 
 
 }
+function autoCompleteQuickBonus(thisdata)
+{
+    $('.autocompleteIcon').html(`<i class="fas fa-exclamation-triangle text-danger">`);
+        //
+        if(thisdata.value=="") return EmptyautoCompleteTopItem();
+//
+
+var Usertoken=localStorage.getItem("Usertoken");
+   //search products
+   $.ajax({
+
+url:`https://stock.appdev.live/api/viewSearchAllStock`,
+type:'get',
+headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        //"Authorization": `Bearer ${Usertoken}`
+    },
+data:{
+    productCode:thisdata.value,
+},
+success:function(data){
+if(data.status){//return data as true
+
+    $('.autoCompleteTopItem').show();
+
+var data=data.result;
+ var getdata="";
+ for(var i=0;i<data.length;i++){
+     console.log(data);
+
+    getdata+=`
+    <li class="list-group-item d-flex justify-content-between align-items-center mylogout myhover" onclick="return addItemQuickBonus('${data[i].productCode}','${data[i].price}')">
+    ${data[i].productCode}=>${data[i].tags}
+    <span class="badge "></span>
+  </li>
+    `;
+
+ }
+
+ $('.autoCompleteTopItem').html(getdata);
+
+
+
+
+}
+else{
+    /*$('.autoCompleteTopItem').html("");
+    $('.autoCompleteTopItem').hide();*/
+    EmptyautoCompleteTopItem();
+}
+
+
+
+},
+error:function(data){
+//alert("errors occured please retry this process again or contact system Admin");
+//window.location.href = "./login";
+}
+});
+    return false;
+}
+function addItemQuickBonus(itemName,itemPrice){
+    $('.productCodeClass').val(itemName);
+    $('.productCodePriceClass').val(itemPrice);
+    $('.autoCompleteTopItem').html("");
+    $('.autoCompleteTopItem').hide();
+    $('.autocompleteIcon').html(`<i class="fas fa-check text-success"></i>`);
+}
+
+function autoCompleteGiftQuickBonus(thisdata)
+{
+    $('.autocompleteGiftIcon').html(`<i class="fas fa-exclamation-triangle text-danger">`);
+        //
+        if(thisdata.value=="") return EmptyautoCompleteTopItem();
+//
+
+var Usertoken=localStorage.getItem("Usertoken");
+   //search products
+   $.ajax({
+
+url:`https://stock.appdev.live/api/viewSearchAllStock`,
+type:'get',
+headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        //"Authorization": `Bearer ${Usertoken}`
+    },
+data:{
+    productCode:thisdata.value,
+},
+success:function(data){
+if(data.status){//return data as true
+
+    $('.autoCompleteGiftTopItem').show();
+
+var data=data.result;
+ var getdata="";
+ for(var i=0;i<data.length;i++){
+     console.log(data);
+
+    getdata+=`
+    <li class="list-group-item d-flex justify-content-between align-items-center mylogout myhover" onclick="return addItemGiftQuickBonus('${data[i].productCode}','${data[i].price}')">
+    ${data[i].productCode}=>${data[i].tags}
+    <span class="badge "></span>
+  </li>
+    `;
+
+ }
+
+ $('.autoCompleteGiftTopItem').html(getdata);
+
+
+
+
+}
+else{
+    /*$('.autoCompleteTopItem').html("");
+    $('.autoCompleteTopItem').hide();*/
+    EmptyautoCompleteTopItem();
+}
+
+
+
+},
+error:function(data){
+//alert("errors occured please retry this process again or contact system Admin");
+//window.location.href = "./login";
+}
+});
+    return false;
+}
+function addItemGiftQuickBonus(itemName,itemPrice){
+    $('.productCodeGiftClass').val(itemName);
+    $('.productGiftPriceClass').val(itemPrice);
+    $('.autoCompleteGiftTopItem').html("");
+    $('.autoCompleteGiftTopItem').hide();
+    $('.autocompleteGiftIcon').html(`<i class="fas fa-check text-success"></i>`);
+}
+
 function checkGiftMoney(thisData)
 {
     if(thisData.value=='Gift')

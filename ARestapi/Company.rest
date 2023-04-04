@@ -130,7 +130,7 @@ content-type: application/json;charset=UTF-8
 Authorization: Bearer {{Auth_token}}
 
 {
-"Ccode":"250",
+"Ccode":"+250",
 "phone":"0782389359"
 
 
@@ -350,6 +350,21 @@ Authorization: Bearer {{Auth_token}}
 
 
 }
+### Get All ParticipatedHist
+
+GET  {{baseUrl}}/GetAllParticipatedHist
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+"uid":"kivuBucket_1672353285",
+"uidUser":"kebineericMuna_1674160265",
+"LimitStart":0,
+"LimitEnd":3
+
+
+}
+
 
 ### Quick Bonus
 
@@ -429,7 +444,7 @@ Authorization: Bearer {{Auth_token}}
 
 {
  "uidUser":"juma",
- "productName":"nyota"
+ "productName":"meka"
 
 
 

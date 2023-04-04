@@ -64,6 +64,7 @@ Route::get('/GetAllParticipateEvent','CompanyController@CompanyGetAllParticipate
 Route::get('/GetActiveParticipateEvent','CompanyController@CompanyGetActiveParticipateEvent')->name('CompanyGetActiveParticipateEvent');
 Route::get('/GetReachedParticipateEvent','CompanyController@CompanyGetReachedParticipateEvent')->name('CompanyGetReachedParticipateEvent');
 Route::get('/GetParticipatedHist','CompanyController@CompanyGetParticipatedHist')->name('CompanyGetParticipatedHist');
+Route::get('/GetAllParticipatedHist','CompanyController@CompanyGetAllParticipatedHist')->name('CompanyGetAllParticipatedHist');
 
 /*company topup User */
 

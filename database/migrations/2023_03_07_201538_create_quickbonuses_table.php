@@ -16,7 +16,7 @@ class CreateQuickbonusesTable extends Migration
         Schema::create('quickbonuses', function (Blueprint $table) {
             $table->id();
 
-
+            $table->string('quickUid')->default('none')->index('quickUid');//this will make us trace quickBonuse
             $table->string('productName')->default('none')->index('productName');
             $table->string('qty')->default('none');
             $table->string('price')->default('none');

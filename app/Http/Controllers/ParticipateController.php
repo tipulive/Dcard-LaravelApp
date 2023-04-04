@@ -424,10 +424,12 @@ if($check)
         }
         public function SetupQuickBonus($input){
             //note here i am gonna use Api to get product Details
-
+            $uid=preg_replace('/[^A-Za-z0-9-]/','',$input["productName"]);
+            $uid=$uid.""."_".date(time());
             $bonusValue=($input['bonusType']=='Gift')?$input['giftPerPcs']:$input['bonusValue'];
             $check=DB::table("quickbonuses")
             ->insert([
+            "quickUid"=>$uid,
             "productName"=>$input["productName"],
             "qty"=>$input['qty'],
             "price"=>$input['price'],
@@ -533,6 +535,7 @@ if($check)
                 ->insert([
                 "uid"=>$uidForm,
                 "uidUser"=>$input["uidUser"],
+                "quickUid"=>$input["quickUid"],
                 "productName"=>$input["productName"],
                 "qty"=>$input['qty'],
                 "price"=>$input['price'],
@@ -673,13 +676,26 @@ if($check)
             $LimitStart=$input["LimitStart"]??0;
             $LimitEnd=$input["LimitEnd"]??10;
             $product=$input['productName']??'';
-            $productName=($product!='')?"and productName Like '%$product%' limit 10":"order by id desc limit $LimitStart,$LimitEnd";
+            $status=$input['status']??'';
+            $statusQuery=($status!='')?"and quickbosubmits.status='$status'":"and quickbosubmits.status='on'";
+            $uidUser=$input["uidUser"]??'';
+            $uidUserQuery=($uidUser!='')?"and quickbosubmits.uidUser='$uidUser'":"";
+
+            $productName=($product!='')?"and quickbosubmits.productName Like '%$product%' limit 10":"order by id desc limit $LimitStart,$LimitEnd";
 
 
-            $check=DB::select("select *from quickbosubmits where uidUser=:uidUser and subscriber=:subscriber and status='on' $productName",array(
+           /*$check=DB::select("select *from quickbosubmits where uidUser=:uidUser and subscriber=:subscriber and status='on' $productName",array(
                 "uidUser"=>$input["uidUser"],
                 "subscriber"=>Auth::user()->subscriber
+            ));*/
+            $check=DB::select("SELECT quickbosubmits.id,quickbosubmits.uid,quickbosubmits.uidUser,quickbosubmits.productName,quickbosubmits.qty,quickbosubmits.total
+            ,quickbosubmits.bonusType,quickbosubmits.giftName,quickbosubmits.totBonusValue,quickbosubmits.updated_at,quickbonuses.bonusValue,quickbonuses.giftName as bonGiftName,quickbonuses.bonusType as bonBonusType,quickbonuses.giftValues as bonGiftValues,quickbonuses.giftMin,quickbonuses.moneyMin,quickbonuses.price,quickbonuses.giftPerPcs FROM quickbosubmits
+            INNER JOIN quickbonuses ON quickbosubmits.subscriber=:subscriber $uidUserQuery $statusQuery and quickbosubmits.quickUid=quickbonuses.quickUid $productName",array(
+
+                "subscriber"=>Auth::user()->subscriber
             ));
+
+
 
 
                     if($check)
@@ -709,7 +725,7 @@ if($check)
 
 
 
-            $check=DB::select("select *from quickbosubmits where uidUser=:uidUser and subscriber=:subscriber and status='on' limit 100",array(
+            $check=DB::select("select price,quickUid,productName,uidUser,subscriber from quickbosubmits where uidUser=:uidUser and subscriber=:subscriber and status='on' limit 100",array(
                 "uidUser"=>$input["uidUser"],
                 "subscriber"=>Auth::user()->subscriber
             ));
@@ -721,7 +737,7 @@ if($check)
                      return response([
                          "status"=>true,
                          "count"=>count($check),
-                         "uid"=>$check[0]->uid,
+                         "resultData"=>$check,
 
 
                      ],200);
