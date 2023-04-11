@@ -48,6 +48,7 @@ class AuthAdminLoginController extends Controller
                     "name"=>Auth::guard('Admin')->user()->name,
                     "email"=>Auth::guard('Admin')->user()->email,
                     "tel"=>Auth::guard('Admin')->user()->phone,
+                    "Ccode"=>Auth::guard('Admin')->user()->Ccode,
                     "platform"=>Auth::guard('Admin')->user()->platform,
                     "CompanyName"=>Auth::guard('Admin')->user()->CompanyName,
                     "subscriber"=>Auth::guard('Admin')->user()->subscriber,
@@ -67,19 +68,36 @@ class AuthAdminLoginController extends Controller
     }
     }
     public function AdminLoginPhone($input){
-        if(Auth::attempt([
 
-			'phone'=>$input['phone'], //means if it check username table =to input name them add input name;
+        if(Auth::guard('Admin')->attempt([
+
+			'PhoneNumber'=>$input['PhoneNumber'], //means if it check username table =to input name them add input name;
 			'password'=>$input['password'],
 
 
 		]))
 
 		{
+            $user=auth::guard('Admin')->user();
+            $success['token']=$user->createToken('MyApp')->plainTextToken;
+            $success['name']=$user->email;
 
             return response([
                 "status"=>true,
-                "result"=>$check,
+               // "result"=>Auth::guard('Admin')->user(),
+                "token"=>$success['token'],
+                "User"=>[
+                    "uid"=>Auth::guard('Admin')->user()->uid,
+                    "first_name"=>Auth::guard('Admin')->user()->fname,
+                    "last_name"=>Auth::guard('Admin')->user()->name,
+                    "name"=>Auth::guard('Admin')->user()->name,
+                    "email"=>Auth::guard('Admin')->user()->email,
+                    "tel"=>Auth::guard('Admin')->user()->phone,
+                    "Ccode"=>Auth::guard('Admin')->user()->Ccode,
+                    "platform"=>Auth::guard('Admin')->user()->platform,
+                    "CompanyName"=>Auth::guard('Admin')->user()->CompanyName,
+                    "subscriber"=>Auth::guard('Admin')->user()->subscriber,
+                ]
 
             ],200);
 

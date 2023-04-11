@@ -1,14 +1,24 @@
 @baseUrl = http://localhost:8000/api
 @email=company@gmail.com
+@PhoneNumber=+250782389359
 @password=1
 @Auth_token=244|ygdCii7TkgEHjyyRmp8XZAt0Yt7iC8x8sjE7BQaI
 
-### Company Login
+### Company Login with email
 POST  {{baseUrl}}/AdminLoginEmail/
 Content-Type: application/json
 
 {
 "email": "{{email}}",
+"password": "{{password}}"
+}
+
+### Company Login with phone
+POST  {{baseUrl}}/AdminLoginPhone/
+Content-Type: application/json
+
+{
+"PhoneNumber": "{{PhoneNumber}}",
 "password": "{{password}}"
 }
 

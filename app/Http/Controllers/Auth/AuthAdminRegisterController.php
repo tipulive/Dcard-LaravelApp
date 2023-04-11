@@ -22,11 +22,12 @@ class AuthAdminRegisterController extends Controller
         $this->email_confirm='24 hours';
 
     }
-    public function AdminCreateCompany($input)
+    public function AdminCreateCompany($input)//something missing  like valuation (phone or email,or )
     {
         $uid=preg_replace('/[^A-Za-z0-9-]/','',$input['name']);//generated on production
         $subscriber=preg_replace('/[^A-Za-z0-9-]/','',$input['CompanyName']);
         //echo $this->today;
+        $PhoneNumber=$input['Ccode']."".$input['phone'];
         $uid=$uid.""."_".date(time());
                 $check=DB::table("admins")
                 ->insert([
@@ -36,6 +37,8 @@ class AuthAdminRegisterController extends Controller
                     'email'=>$input['email'],
                     'Ccode'=>$input['Ccode'],
                     'phone'=>$input['phone'],
+                    'PhoneNumber'=>$PhoneNumber,
+                    'initCountry'=>$input['initCountry']??'none',
                     'uidCreator'=>Auth::user()->uid,
                     'CompanyName'=>$input['CompanyName'],
                     'subscriber'=>$subscriber,

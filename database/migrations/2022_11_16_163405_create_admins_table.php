@@ -23,6 +23,10 @@ class CreateAdminsTable extends Migration
             $table->string('password')->default('none');
             $table->string('Ccode')->default('none')->index("Ccode");
             $table->string('phone')->default('none')->index('phone');
+            $table->string('initCountry')->default('none');
+            $table->string('country')->default('none')->index("country");
+            $table->string('PhoneNumber')->default('none')->index("PhoneNumber");
+
             $table->string('platform')->default('none');
             $table->string('status')->default('none');
             $table->string('CompanyName')->default('none')->index('CompanyName');

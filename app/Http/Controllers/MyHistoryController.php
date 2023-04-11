@@ -198,6 +198,9 @@ public function GetAllParticipatedHist($input)
 {
     $LimitStart=$input["LimitStart"]??0;
     $LimitEnd=$input["LimitEnd"]??10;
+    $name=$input["name"]??"none";
+    $nameQuery=($name!='none')?"and users.name Like '%$name%'  limit 10":"order by participated_hists.id desc limit $LimitStart,$LimitEnd";
+    //$Name
 
 
 
@@ -205,8 +208,8 @@ public function GetAllParticipatedHist($input)
        "subscriber"=>Auth::user()->subscriber
 
     ));*/
-    $check=DB::select("SELECT participated_hists.id,participated_hists.uid,promotions.promoName,promotions.gain,promotions.reach,participated_hists.inputData,participated_hists.created_at,users.name FROM participated_hists
-    INNER JOIN users INNER JOIN promotions ON participated_hists.subscriber=:subscriber and participated_hists.uid=promotions.uid and participated_hists.uidUser=users.uid order by participated_hists.id desc limit $LimitStart,$LimitEnd",array(
+    $check=DB::select("SELECT users.uid as uidUser ,participated_hists.id,participated_hists.uid,promotions.promoName,promotions.gain,promotions.reach,participated_hists.inputData,participated_hists.created_at,users.name FROM participated_hists
+    INNER JOIN users INNER JOIN promotions ON participated_hists.subscriber=:subscriber and participated_hists.uid=promotions.uid and participated_hists.uidUser=users.uid $nameQuery",array(
 
         "subscriber"=>Auth::user()->subscriber
     ));

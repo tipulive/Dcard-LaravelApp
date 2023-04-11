@@ -84,7 +84,8 @@ class CardController extends Controller
                     //"syncadd"=>"downadd",
                     //"syncupdate"=>"downupdate",
 
-                    "subscriber"=>Auth::user()->subscriber??"none"
+                    "subscriber"=>Auth::user()->subscriber??"none",
+                    "created_at"=>$this->today
                     ]);
                     \QrCode::size(500)
                     ->format('png')

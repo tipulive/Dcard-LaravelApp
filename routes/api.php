@@ -31,6 +31,7 @@ Route::post('/UserLoginEmail','UserController@UserLoginEmail')->name('UserLoginE
 /* others Authentication*/
 Route::post('/AdminRegisterEmail','AdminController@AdminRegisterEmail')->name('AdminRegisterEmail');
 Route::post('/AdminLoginEmail','AdminController@AdminLoginEmail')->name('AdminLoginEmail');
+Route::post('/AdminLoginPhone','AdminController@AdminLoginPhone')->name(' AdminLoginPhone');
 
 //Route::get('/testauth','TestController@testauth')->name('testauth');
 

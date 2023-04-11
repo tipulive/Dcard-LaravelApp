@@ -18,14 +18,36 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+@media print {
+   .printBtn {
+      display:none;
+   }
+   @page {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  @page :first {
+    margin-top: 0;
+  }
+  @page :left {
+    margin-left: 0;
+  }
+  @page :right {
+    margin-right: 0;
+  }
+
+}
+
+</style>
+
   </head>
+
   <body>
-  <button onclick="return print()">Print</button>
-<div class="cardDisplay" id="myDiv"></div>
+  <button onclick="return printPage()" id="printBtn"
+   class="printBtn">Print</button>
 
-
-
-
+<div class="cardDisplay" id="myDiv" ></div>
 
 <script src="dashboard/vendor/jquery-3.2.1.min.js"></script>
     <!--<script src="script.js"></script>-->
@@ -60,7 +82,7 @@ if(data.status){//return data as true
 getData+=`
 
 <div class="container">
-      <div class="card-mode-icon"  onclick="print()">
+      <div class="card-mode-icon"  >
         <span class="material-symbols-outlined print" > light_mode </span>
       </div>
       <div class="card-wrapper">
@@ -91,7 +113,15 @@ getData+=`
 
 }
 
+
 $('.cardDisplay').html(getData);
+
+if (i === resultData.length) {
+    // the loop has finished
+    //$('#printBtn').click();
+    ///printPage();
+}
+
 
 
 
@@ -112,8 +142,10 @@ error:function(data){
 return false;
 
 }
-function print(){
-        window.print();
+function printPage(){
+    //javascript:window.print();
+    //$('#printBtn').hide();
+    window.print();
         return false;
     }
 function splitNumber(num) {
