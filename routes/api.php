@@ -73,8 +73,10 @@ Route::post('/AddBalance','CompanyController@CompanyTopupUser')->name('CompanyTo
 Route::post('/EditBalance','CompanyController@CompanyTopupEditBalance')->name('CompanyTopupEditBalance');
 Route::post('/RedeemBalance','CompanyController@CompanyTopupRedeemBalance')->name('CompanyTopupRedeemBalance');
 Route::post('/RedeemBonus','CompanyController@CompanyTopupRedeemBonus')->name('CompanyTopupRedeemBonus');
+Route::get('/GetCompanyRecord','CompanyController@CompanyTopupGetCompanyRecord')->name('CompanyTopupGetCompanyRecord');
 Route::get('/GetBalanceUser','CompanyController@CompanyTopupBalanceUser')->name('CompanyTopupBalanceUser');
 Route::get('/GetBalanceHist','CompanyController@CompanyTopupBalanceHistUser')->name('CompanyTopupBalanceHistUser');
+Route::get('/GetBalanceHistCreator','CompanyController@CompanyTopupBalanceHistCreator')->name('CompanyTopupBalanceHistCreator');
 
 /*Quickie Bonus */
 Route::post('/SetupQuickBonus','CompanyController@CompanyPartSetupQuickBonus')->name('CompanyPartSetupQuickBonus');

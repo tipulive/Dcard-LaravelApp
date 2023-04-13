@@ -46,7 +46,7 @@ class TopupController extends Controller
            $balance=$input["balance"];
             $check=DB::update("update topups set uidCreator=:uidCreator,subscriber=:subscriber,updated_at=:updated_at,description=:description,balance=balance+$balance where uid=:uid limit 1",array(
                 "uid"=>$input["uidUser"],//uid of user
-                "uidCreator"=>Auth::user()->uidCreator,
+                "uidCreator"=>Auth::user()->uid,
                 "subscriber"=>Auth::user()->subscriber,
                 "description"=>$input["description"]??'none',
                 "updated_at"=>$this->today
@@ -62,7 +62,7 @@ class TopupController extends Controller
                 $check=DB::table("topups")
                 ->insert([
                     "uid"=>$input["uidUser"],//uid of user
-                    "uidCreator"=>Auth::user()->uidCreator,
+                    "uidCreator"=>Auth::user()->uid,
                     "subscriber"=>Auth::user()->subscriber,
                     "balance"=>$input["balance"],
                     "CBalance"=>$input["CBalance"]??'US',
@@ -119,7 +119,7 @@ class TopupController extends Controller
             $balance=$input["balance"];
             $check=DB::update("update topups set uidCreator=:uidCreator,subscriber=:subscriber,updated_at=:updated_at,description=:description,balance=balance+$balance where uid=:uid limit 1",array(
                 "uid"=>$input["uidUser"],//uid of user
-                "uidCreator"=>Auth::user()->uidCreator,
+                "uidCreator"=>Auth::user()->uid,
                 "subscriber"=>Auth::user()->subscriber,
                // "currency"=>$input["amount"],
                 "description"=>$input["description"]??'none',
@@ -138,7 +138,7 @@ class TopupController extends Controller
     {
         $uid=$input["uidUser"];
 
-       $uidCreator=Auth::user()->uidCreator;
+       $uidCreator=Auth::user()->uid;
         $subscriber=Auth::user()->subscriber;
         //$bonus=$input["gaine"];
        // $CBonus=$input["CBonus"]??'US';
@@ -222,7 +222,7 @@ else{
                 $check=DB::table("redeemeds")
                 ->insert([
                     "uid"=>$input["uid"],//uid of user
-                    "uidCreator"=>Auth::user()->uidCreator,
+                    "uidCreator"=>Auth::user()->uid,
                    // "subscriber"=>Auth::user()->subscriber,
                     "balance"=>$amount,
                     "CBalance"=>$input["CBalance"]??'US',
@@ -231,13 +231,37 @@ else{
                 ]);
                 if($check)
                 {
+                    $uidCreator=Auth::user()->uid; //is the one who will pay money to client when he will withdraw
+                    $subscriber=Auth::user()->subscriber; //company id
+                    $check2=DB::insert("
+                    INSERT INTO admnin_records(uid,balance,updated_at,currentAction,subscriber)
+VALUES ('$uidCreator','$amount','$this->today','WithdrawBalance','$subscriber')
+ON DUPLICATE KEY UPDATE
+balance=balance+VALUES(balance),
+updated_at=VALUES(updated_at),
+currentAction=VALUES(currentAction)
 
-                 return response([
-                     "status"=>true,
-                     "result"=>$check
+                    ");//it means this query is very fast because VALUES to use Amount
+
+                    if($check2)
+                    {
+                        return response([
+                            "status"=>true,
+                            "result"=>$check2
 
 
-                 ],200);
+                        ],200);
+                    }
+                    else{
+                        return response([
+                            "status"=>false,
+                            "message"=>"admin records table have some problem",
+                            "result"=>$check2,
+
+                        ],200);
+
+                    }
+
                 }
                 else{
                  return response([
@@ -259,6 +283,7 @@ else{
           }
 
     }
+
     public function RedeemBonus($input){
         $validateAmount = Validator::make($input, [
             // "price" => "numeric|min:0|max:100000000",
@@ -292,13 +317,38 @@ else{
             ]);
             if($check)
             {
+                $uidCreator=Auth::user()->uid; //is the one who will pay money to client when he will withdraw
+                $subscriber=Auth::user()->subscriber; //company id
+                $check2=DB::insert("
+                INSERT INTO admnin_records(uid,bonus,updated_at,currentAction,subscriber)
+VALUES ('$uidCreator','$amount','$this->today','WithdrawBonus','$subscriber')
+ON DUPLICATE KEY UPDATE
+bonus=bonus+VALUES(bonus),
+updated_at=VALUES(updated_at),
+currentAction=VALUES(currentAction)
 
-             return response([
-                 "status"=>true,
-                 "result"=>$check
+                ");//it means this query is very fast because VALUES to use Amount
+
+                if($check2)
+                {
+                    return response([
+                        "status"=>true,
+                        "result"=>$check2
 
 
-             ],200);
+                    ],200);
+                }
+                else{
+                    return response([
+                        "status"=>false,
+                        "message"=>"admin records table have some problem",
+                        "result"=>$check2,
+
+                    ],200);
+
+                }
+
+
             }
             else{
              return response([
@@ -318,6 +368,32 @@ else{
             ],200);
         }
     }
+    }
+
+    public function GetCompanyRecord($input){
+        $check=DB::select("select *from admnin_records where uid=:uid limit 1",array(
+            "uid"=>Auth::user()->uid
+        ));
+        if($check)
+        {
+
+         return response([
+             "status"=>true,
+             "result"=>$check
+
+
+         ],200);
+        }
+        else{
+         return response([
+             "status"=>false,
+             "result"=>$check,
+
+
+         ],200);
+        }
+
+
     }
 
 

@@ -1222,6 +1222,39 @@ public function CompanySafariCalculate(Request $request){
 
 
     }
+    public function CompanyTopupBalanceHistCreator(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new MyHistoryController)->BalanceHistCreator($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+
+
+
+    }
     public function CompanyTopupRedeemBalance(Request $request){//add money to your country
         if(Auth::check())
         {
@@ -1266,6 +1299,41 @@ public function CompanySafariCalculate(Request $request){
             {
                 $input=$request->all();
                 return (new TopupController)->RedeemBonus($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+
+
+
+
+
+    }
+    public function CompanyTopupGetCompanyRecord(Request $request){//add money to your country
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new TopupController)->GetCompanyRecord($input);
             }
             else{
                 return response([

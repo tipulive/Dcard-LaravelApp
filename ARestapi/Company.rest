@@ -107,7 +107,7 @@ Authorization: Bearer {{Auth_token}}
 
 {
 "uid":"kebineericMuna_1674592764",
-"amount":"100",
+"amount":"15",
 "description":"descr"
 }
 ### Redeemmed Bonus
@@ -117,9 +117,14 @@ Authorization: Bearer {{Auth_token}}
 
 {
 "uid":"kebineericMuna_1674592764",
-"amount":"300",
+"amount":"10",
 "description":"descr"
 }
+
+### Get Widraw Bonus,Balance,top up balance too after Redeem
+GET  {{baseUrl}}/GetCompanyRecord
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
 
 ###
 GET  http://localhost:8000/submit-form
@@ -180,6 +185,22 @@ Authorization: Bearer {{Auth_token}}
 "uid":"kebineericMuna_1668935593",
 "LimitStart":0,
 "LimitEnd":10,
+"optionCase":"bonus"
+
+
+
+}
+### Get Balance and Bonus Hist
+
+GET  {{baseUrl}}/GetBalanceHistCreator
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
+
+{
+
+"LimitStart":0,
+"LimitEnd":10,
+"name":"none",
 "optionCase":"bonus"
 
 

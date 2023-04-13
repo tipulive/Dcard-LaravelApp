@@ -34,7 +34,7 @@ class PromotionController extends Controller
         $check=DB::table("promotions")
         ->insert([
          "uid"=>$uid,
-         "uidCreator"=>Auth::user()->uidCreator,
+         "uidCreator"=>Auth::user()->uid,
          "subscriber"=>Auth::user()->subscriber,
          "promoName"=>$input["promoName"],
          "promo_msg"=>$input["promoMsg"],

@@ -138,6 +138,50 @@ public function BalanceHistUser($input)// and Bonus too
 
     }
 }
+public function BalanceHistCreator($input)// and Bonus too
+{
+
+
+    $LimitStart=$input["LimitStart"]??0;
+    $LimitEnd=$input["LimitEnd"]??10;
+    $name=$input["name"]??"none";
+    $option=strtolower($input["optionCase"])??'';
+    $optionData=($option=="balance"|| $option=="bonus")?$option:'';
+
+    $optionCase=($optionData=="balance")?"and topup_histories.balance!='0'":(($optionData=="bonus")?"and topup_histories.bonus!='0'":$optionData);
+
+    $nameQuery=($name!='none')?"and users.name Like '%$name%'  limit 10":"order by topup_histories.id desc limit $LimitStart,$LimitEnd";
+
+    $check=DB::select("SELECT users.uid as uidUser ,topup_histories.id,topup_histories.uidCreator,topup_histories.action,topup_histories.balance,topup_histories.bonus,topup_histories.created_at,users.name FROM topup_histories
+    INNER JOIN users  ON topup_histories.uidCreator=:uidCreator and topup_histories.uid=users.uid $optionCase $nameQuery ",array(
+
+       // "subscriber"=>Auth::user()->subscriber,
+        "uidCreator"=>Auth::user()->uid
+    ));
+   /* $check=DB::select("select *from products limit $LimitStart,$LimitEnd",array(
+       // "uid"=>$input["uid"],
+    ));*/
+    if($check)
+    {
+        return response([
+            "status"=>true,
+            "result"=>$check,
+
+
+        ],200);
+
+    }
+    else{
+
+        return response([
+            "status"=>false,
+            "result"=>$check,
+
+
+        ],200);
+
+    }
+}
 
 public function participatedHist($input,$action,$moreQuery)
 {
@@ -208,10 +252,11 @@ public function GetAllParticipatedHist($input)
        "subscriber"=>Auth::user()->subscriber
 
     ));*/
-    $check=DB::select("SELECT users.uid as uidUser ,participated_hists.id,participated_hists.uid,promotions.promoName,promotions.gain,promotions.reach,participated_hists.inputData,participated_hists.created_at,users.name FROM participated_hists
-    INNER JOIN users INNER JOIN promotions ON participated_hists.subscriber=:subscriber and participated_hists.uid=promotions.uid and participated_hists.uidUser=users.uid $nameQuery",array(
+    $check=DB::select("SELECT users.uid as uidUser ,participated_hists.id,participated_hists.uid,participated_hists.actionName,promotions.promoName,promotions.gain,promotions.reach,participated_hists.inputData,participated_hists.created_at,users.name FROM participated_hists
+    INNER JOIN users INNER JOIN promotions ON participated_hists.uidCreator=:uidCreator and participated_hists.subscriber=:subscriber and participated_hists.uid=promotions.uid and participated_hists.uidUser=users.uid  $nameQuery",array(
 
-        "subscriber"=>Auth::user()->subscriber
+        "subscriber"=>Auth::user()->subscriber,
+        "uidCreator"=>Auth::user()->uid
     ));
 
     if($check)
