@@ -35,37 +35,11 @@ class AdminController extends Controller
         $this->platform1=env('PLATFORM1');
     }
 
+
     public function AdminCreateCompany(Request $request){
-        if(Auth::check())
-        {
 
-
-
-            if(Auth::user()->platform==$this->platform1)
-            {
-                $input=$request->all();
-
+        $input=$request->all();
                 return (new AuthAdminRegisterController)->AdminCreateCompany($input);
-            }
-            else{
-                return response([
-                    "status"=>false,
-                    "result"=>$this->Admin_Auth_result_error,
-                    "error"=>$this->Admin_Auth_error,
-
-                ],200);
-            }
-
-
-        }
-        else{
-            return response([
-                "status"=>false,
-                "result"=>$this->Admin_Auth_result_error,
-                "error"=>$this->Admin_Auth_error,
-
-            ],200);
-        }
 
     }
 

@@ -1,12 +1,18 @@
 @extends('layouts.app')
 @section('content')
 
+<style>
+.iti{
+    width: 100%;
+}
+</style>
+
 <div class="d-lg-flex half">
 <a href="/" class="text-decoration-none"><div class="position-absolute pt-2 pl-2">
       <a href="/" class="btn-sm btn-block btn-dark text-white icon-rotate-left text-decoration-none pl-3 pr-3"></a>
 
      </div></a>
-    <div class="bg order-1 order-md-2 d-none d-md-block" style="background-image: url('images/bg_1og2test.jpg');"></div>
+    <div class="bg order-1 order-md-2 d-none d-md-block" style="background-image: url({{ asset('images/bg_1og2test.jpg') }});"></div>
     <div class="contents order-2 order-md-1">
 
       <div class="container pt-4 pt-md-0">
@@ -31,7 +37,7 @@
 
               <div class="form-group last mb-3 d-none">
                 <label for="password">Tel</label>
-                <input autocomplete="off" type="text" class="form-control" name="tel" value="07878" placeholder="" required>
+                <input autocomplete="off" type="text" class="form-control"  id="phone" value="07878" placeholder="" required>
               </div>
 
               <div class="d-flex mb-5 align-items-center">
@@ -94,5 +100,6 @@ return false;
 });
 
 </script>
+
 
 @endsection

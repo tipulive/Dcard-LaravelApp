@@ -28,7 +28,7 @@ class MyHistoryController extends Controller
         $check=DB::table("topup_histories")
             ->insert([
                 "uid"=>$input["uidUser"],//uid of user
-                "uidCreator"=>Auth::user()->uidCreator,
+                "uidCreator"=>Auth::user()->uid,
                 "subscriber"=>Auth::user()->subscriber,
                 "balance"=>$input["balance"]??0,
 
@@ -67,7 +67,7 @@ class MyHistoryController extends Controller
             ->insert([
                 "uid"=>$input["uidUser"],//uid of user
                 "purpose"=>$input["uid"],//id of promotion
-                "uidCreator"=>Auth::user()->uidCreator,
+                "uidCreator"=>Auth::user()->uid,
                 "subscriber"=>Auth::user()->subscriber,
 
                 "bonus"=>$bonus??0,
@@ -148,12 +148,12 @@ public function BalanceHistCreator($input)// and Bonus too
     $option=strtolower($input["optionCase"])??'';
     $optionData=($option=="balance"|| $option=="bonus")?$option:'';
 
-    $optionCase=($optionData=="balance")?"and topup_histories.balance!='0'":(($optionData=="bonus")?"and topup_histories.bonus!='0'":$optionData);
+    $optionCase=($optionData=="balance")?"and redeemeds.balance!='0'":(($optionData=="bonus")?"and redeemeds.bonus!='0'":$optionData);
 
-    $nameQuery=($name!='none')?"and users.name Like '%$name%'  limit 10":"order by topup_histories.id desc limit $LimitStart,$LimitEnd";
+    $nameQuery=($name!='none')?"and users.name Like '%$name%'  limit 10":"order by redeemeds.id desc limit $LimitStart,$LimitEnd";
 
-    $check=DB::select("SELECT users.uid as uidUser ,topup_histories.id,topup_histories.uidCreator,topup_histories.action,topup_histories.balance,topup_histories.bonus,topup_histories.created_at,users.name FROM topup_histories
-    INNER JOIN users  ON topup_histories.uidCreator=:uidCreator and topup_histories.uid=users.uid $optionCase $nameQuery ",array(
+    $check=DB::select("SELECT users.uid as uidUser ,redeemeds.id,redeemeds.uidCreator,redeemeds.balance,redeemeds.bonus,redeemeds.created_at,users.name FROM redeemeds
+    INNER JOIN users  ON redeemeds.uidCreator=:uidCreator and redeemeds.uid=users.uid $optionCase $nameQuery ",array(
 
        // "subscriber"=>Auth::user()->subscriber,
         "uidCreator"=>Auth::user()->uid
@@ -214,11 +214,15 @@ public function GetParticipatedHist($input)
     $LimitStart=$input["LimitStart"]??0;
     $LimitEnd=$input["LimitEnd"]??10;
 
-    $check=DB::select("select *from participated_hists where uid=:uid and uidUser=:uidUser order by id desc limit $LimitStart,$LimitEnd",array(
-       "uid"=>$input["uid"],
-       "uidUser"=>$input["uidUser"]
-    ));
 
+
+
+    $check=DB::select("SELECT id,uid,inputData,created_at FROM participated_hists
+    where uidUser=:uidUser and uid=:uid  order by id desc limit $LimitStart,$LimitEnd",array(
+
+      "uid"=>$input["uid"],
+     "uidUser"=>$input["uidUser"]
+    ));
     if($check)
     {
 

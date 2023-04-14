@@ -32,6 +32,7 @@ Route::post('/UserLoginEmail','UserController@UserLoginEmail')->name('UserLoginE
 Route::post('/AdminRegisterEmail','AdminController@AdminRegisterEmail')->name('AdminRegisterEmail');
 Route::post('/AdminLoginEmail','AdminController@AdminLoginEmail')->name('AdminLoginEmail');
 Route::post('/AdminLoginPhone','AdminController@AdminLoginPhone')->name(' AdminLoginPhone');
+Route::post('/CreateCompany','AdminController@AdminCreateCompany')->name('AdminCreateCompany');
 
 //Route::get('/testauth','TestController@testauth')->name('testauth');
 
@@ -39,7 +40,6 @@ Route::middleware('auth:sanctum')->group( function () {//here is to protect mult
     Route::get('/logout','AccountController@logout')->name('logout');
 
 /*AdminData*/
-Route::post('/CreateCompany','AdminController@AdminCreateCompany')->name('AdminCreateCompany');
 
 /*Company*/
 Route::get('/PrintCard','CompanyController@CompanyPrintCard')->name('CompanyPrintCard');

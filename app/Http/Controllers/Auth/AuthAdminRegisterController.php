@@ -25,49 +25,81 @@ class AuthAdminRegisterController extends Controller
     public function AdminCreateCompany($input)//something missing  like valuation (phone or email,or )
     {
         $uid=preg_replace('/[^A-Za-z0-9-]/','',$input['name']);//generated on production
-        $subscriber=preg_replace('/[^A-Za-z0-9-]/','',$input['CompanyName']);
+        $subscriber=preg_replace('/[^A-Za-z0-9-]/','',$input['CompanyName']??'none');
         //echo $this->today;
-        $PhoneNumber=$input['Ccode']."".$input['phone'];
+        //$PhoneNumber=$input['Ccode']."".$input['phone'];
+$check1=DB::select("select Phonenumber,email from admins where email=:email or PhoneNumber=:PhoneNumber limit 2",array(
+    'email'=>$input['email'],
+    'PhoneNumber'=>$input['PhoneNumber']
+
+    ));
+    if($check1)
+    {
+
+        return response([
+            "status"=>false,
+            "isValid"=>false,
+            "result"=>$check1,
+            "phone"=>$input['PhoneNumber'],
+            "email"=>$input['email']
+
+
+
+        ],200);
+
+    }
+    else{
+        $company=$input['CompanyName']??'none';
+        $subscriberQuery=$input['subscriber']??'none';
+
         $uid=$uid.""."_".date(time());
-                $check=DB::table("admins")
-                ->insert([
-                    'name'=>$input['name'],
-                    //'fname'=>$input['fname'],
-                    //'lname'=>$input['lname'],
-                    'email'=>$input['email'],
-                    'Ccode'=>$input['Ccode'],
-                    'phone'=>$input['phone'],
-                    'PhoneNumber'=>$PhoneNumber,
-                    'initCountry'=>$input['initCountry']??'none',
-                    'uidCreator'=>Auth::user()->uid,
-                    'CompanyName'=>$input['CompanyName'],
-                    'subscriber'=>$subscriber,
+        $subscriberInput=($subscriberQuery=='none')?$subscriber.""."_".date(time()):$subscriberQuery;
+        $companyQuery=($company=='none')?Auth::user()->CompanyName:$input['CompanyName'];
+        $check=DB::table("admins")
+        ->insert([
+            'name'=>$input['name'],
+            //'fname'=>$input['fname'],
+            //'lname'=>$input['lname'],
+            'email'=>$input['email'],
+            'Ccode'=>$input['Ccode']??'none',
+            'phone'=>$input['phone']??'none',
+            'PhoneNumber'=>$input['PhoneNumber'],
+            //'PhoneNumber'=>$PhoneNumber,
+            'initCountry'=>$input['initCountry']??'none',
+            //'uidCreator'=>Auth::user()->uid,
+            'uidCreator'=>$input['uid'],
+            'CompanyName'=>$companyQuery,
+            'subscriber'=>$subscriberInput,
 
-                    'platform'=>env('PLATFORM3'),
-                    'password' =>bcrypt($input['password']),
-                    //'passdecode' =>$input['password'],
-                    'country'=>'USA',
-                    'uid'=>$uid,
-                    'created_at'=>$this->today,
+            'platform'=>env('PLATFORM3'),
+            'password' =>bcrypt($input['password']),
+            //'passdecode' =>$input['password'],
+            'country'=>'USA',
+            'uid'=>$uid,
+            'created_at'=>$this->today,
 
-                ]);
-                if($check)
-                {
+        ]);
+        if($check)
+        {
 
-                 return response([
-                     "status"=>true,
-                     "result"=>$check,
-                     "userid"=>$uid
+         return response([
+             "status"=>true,
+             "isValid"=>true,
+             "result"=>$check1,
+             "userid"=>$company
 
-                 ],200);
-                }
-                else{
-                 return response([
-                     "status"=>false,
-                     "result"=>$check,
+         ],200);
+        }
+        else{
+         return response([
+             "status"=>false,
+             "isValid"=>false,
+             "result"=>$check,
 
-                 ],200);
-                }
+         ],200);
+        }
+    }
+
     }
     //
     public function AdminRegisterEmail($input)

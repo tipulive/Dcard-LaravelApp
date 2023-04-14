@@ -30,9 +30,9 @@ Authorization: Bearer {{Auth_token}}
 
 {
 "name": "kebine eric Muna",
-"email": "company@gmail.com",
-"phone": "0782389359",
-"CompanyName": "TEA LTD",
+"email": "company2@gmail.com",
+"PhoneNumber": "078238935988",
+"CompanyName": "TVA",
 "password": "1"
 
 

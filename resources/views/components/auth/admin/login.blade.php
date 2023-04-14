@@ -16,8 +16,8 @@
             <p class="mb-4 d-none">Lorem ipsum dolor sit amet elit. Sapiente sit aut eos consectetur adipisicing.</p>
             <form  class="Form_UserLogin">
               <div class="form-group first">
-                <label for="username">Email or username</label>
-                <input type="text" name="email"  class="form-control" placeholder="Email" required>
+                <label for="username">Email or Phone i.e:+250782389359</label>
+                <input type="text" name="email"  class="form-control" placeholder="Email or Phone" required>
               </div>
               <div class="form-group last mb-3">
                 <label for="password">Password</label>

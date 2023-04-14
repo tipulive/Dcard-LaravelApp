@@ -9,7 +9,7 @@ POST  {{baseUrl}}/AdminLoginEmail/
 Content-Type: application/json
 
 {
-"email": "{{email}}",
+"email": "{{PhoneNumber}}",
 "password": "{{password}}"
 }
 
@@ -377,7 +377,7 @@ Authorization: Bearer {{Auth_token}}
 "uid":"kivuBucket_1672353285",
 "uidUser":"kebineericMuna_1674160265",
 "LimitStart":0,
-"LimitEnd":3
+"LimitEnd":10
 
 
 }

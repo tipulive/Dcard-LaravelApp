@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\CompanyController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,7 +15,30 @@ use App\Http\Controllers\CompanyController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/testphone', function () {
+    return view('testphone');
+});
+Route::get('admin/{id}', function ($id) {
+    $user=DB::select("select subscriber,CompanyName,uid from admins where id=:id",array(
+        "id"=>$id
+    ));
+    if($user){
+        return view('/components/auth/admin/company', ['user' => $user]);
 
+    }
+
+});
+Route::get('company/{id}', function ($id) {
+    $user=DB::select("select subscriber,CompanyName,uid from admins where id=:id",array(
+        "id"=>$id
+    ));
+
+    if($user){
+        return view('/components/auth/company/registerUser', ['user' => $user]);
+
+    }
+
+});
 
 Route::get('/ViewCard', function () {
     return view('PrintCard');

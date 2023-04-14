@@ -173,9 +173,10 @@ else{
     public function GetBalanceUser($input)
     {
 
-        $check=DB::select("select *from topups where uid=:uid limit 1",array(
+        $check=DB::select("select balance,bonus from topups where uid=:uid  limit 1",array(
             "uid"=>$input["uid"]
         ));
+
         if($check)
         {
 
@@ -223,7 +224,7 @@ else{
                 ->insert([
                     "uid"=>$input["uid"],//uid of user
                     "uidCreator"=>Auth::user()->uid,
-                   // "subscriber"=>Auth::user()->subscriber,
+                   "subscriber"=>Auth::user()->subscriber,
                     "balance"=>$amount,
                     "CBalance"=>$input["CBalance"]??'US',
                     "description"=>$input["description"]??'none',
@@ -308,8 +309,8 @@ currentAction=VALUES(currentAction)
             $check=DB::table("redeemeds")
             ->insert([
                 "uid"=>$input["uid"],//uid of user
-                "uidCreator"=>Auth::user()->uidCreator,
-               // "subscriber"=>Auth::user()->subscriber,
+                "uidCreator"=>Auth::user()->uid,
+               "subscriber"=>Auth::user()->subscriber,
                 "bonus"=>$amount,
                 "CBonus"=>$input["CBonus"]??'US',
                 "description"=>$input["description"]??'none',
