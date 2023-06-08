@@ -97,6 +97,7 @@ $random = Str::random(5);
 return response([
     "status"=>true,
     "result"=>$random,
+    "test"=>Auth::user(),
 
 
 

@@ -95,7 +95,8 @@ getData+=`
         </div>
         <div class="card-left">
           <h3 class="card-bin-number">${splitNumber(resultData[i].CardNumber)}</h3>
-          <p class="card-date">valid through <span>09/2025</span></p>
+          <!--<p class="card-date ">valid through <span>09/2025</span></p>-->
+          <p class="card-date">Email: <span>appdevlive@gmail.com</span></p>
           <!--<p class="card-owner">Eric Ford</p>-->
         </div>
         <div class="card-circle-right">

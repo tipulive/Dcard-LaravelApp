@@ -290,6 +290,46 @@ if($check)
         ],200);
        }
     }
+    public function GetAllParticipate($input)
+{
+    $LimitStart=$input["LimitStart"]??0;
+    $LimitEnd=$input["LimitEnd"]??10;
+    $name=$input["name"]??"none";
+    $nameQuery=($name!='none')?"and users.name Like '%$name%'  limit 10":"order by participateds.updated_at desc limit $LimitStart,$LimitEnd";
+    //$Name
+
+
+
+    /*$check=DB::select("select *from participated_hists where subscriber=:subscriber order by id desc limit $LimitStart,$LimitEnd",array(
+       "subscriber"=>Auth::user()->subscriber
+
+    ));*/
+    $check=DB::select("SELECT users.uid as uidUser,participateds.id,participateds.uid,promotions.promoName,promotions.gain,promotions.reach,participateds.inputData,participateds.created_at,users.name FROM participateds
+    INNER JOIN users INNER JOIN promotions ON participateds.uid=promotions.uid AND participateds.uidCreator=:uidCreator and participateds.subscriber=:subscriber and participateds.uid=promotions.uid and participateds.uidUser=users.uid  $nameQuery",array(
+
+        "subscriber"=>Auth::user()->subscriber,
+        "uidCreator"=>Auth::user()->uid
+    ));
+
+    if($check)
+    {
+
+     return response([
+         "status"=>true,
+         "count"=>count($check),
+         "result"=>$check
+
+
+     ],200);
+    }
+    else{
+     return response([
+         "status"=>false,
+         "result"=>$check,
+
+     ],200);
+    }
+}
     public function GetAllParticipateEvent($input)//All
 
 {

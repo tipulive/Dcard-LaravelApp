@@ -54,7 +54,9 @@ Route::post('/AssignCard','CompanyController@CompanyAssignCard')->name('CompanyA
 Route::get('/CompanySyncCardDownload','CompanyController@CompanySyncCardDownload')->name('CompanySyncCardDownload');
 Route::post('/CompanySyncUpload','CompanyController@CompanySyncUpload')->name('CompanySyncUpload');
 Route::post('/CreatePromotionEvent','CompanyController@CompanyCreatePromotionEvent')->name('CompanyCreatePromotionEvent');
+Route::post('/EditPromotionEvent','CompanyController@CompanyEditPromotionEvent')->name('CompanyEditPromotionEvent');
 Route::get('/GetAllPromotionEvent','CompanyController@CompanyGetAllPromotionEvent')->name('CompanyGetAllPromotionEvent');
+Route::get('/ViewAllPromotionEvent','CompanyController@CompanyViewAllPromotionEvent')->name('CompanyViewAllPromotionEvent');
 Route::post('/SetPromotionEventStatus','CompanyController@CompanySetPromotionEventStatus')->name('CompanySetPromotionEventStatus');
 /*company make user Participate */
 Route::post('/ParticipateEvent','CompanyController@CompanyParticipateEvent')->name('CompanyParticipateEvent');
@@ -66,6 +68,7 @@ Route::get('/GetActiveParticipateEvent','CompanyController@CompanyGetActiveParti
 Route::get('/GetReachedParticipateEvent','CompanyController@CompanyGetReachedParticipateEvent')->name('CompanyGetReachedParticipateEvent');
 Route::get('/GetParticipatedHist','CompanyController@CompanyGetParticipatedHist')->name('CompanyGetParticipatedHist');
 Route::get('/GetAllParticipatedHist','CompanyController@CompanyGetAllParticipatedHist')->name('CompanyGetAllParticipatedHist');
+Route::get('/GetAllParticipate','CompanyController@CompanyGetAllParticipate')->name('CompanyGetAllParticipate');
 
 /*company topup User */
 

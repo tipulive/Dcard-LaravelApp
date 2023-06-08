@@ -771,6 +771,38 @@ public function CompanySafariCalculate(Request $request){
 
     }
 
+    public function CompanyEditPromotionEvent(Request $request){
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+
+                return (new PromotionController)->EditPromotionEvent($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+
+    }
     public function CompanyGetAllPromotionEvent(Request $request){
         if(Auth::check())
         {
@@ -804,6 +836,38 @@ public function CompanySafariCalculate(Request $request){
 
     }
 
+    public function CompanyViewAllPromotionEvent(Request $request){
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+
+                return (new PromotionController)->ViewAllPromotionEvent($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+
+    }
 
     public function CompanySetPromotionEventStatus(Request $request){
         if(Auth::check())
@@ -1045,6 +1109,37 @@ public function CompanySafariCalculate(Request $request){
             {
                 $input=$request->all();
                 return (new MyHistoryController)->GetParticipatedHist($input);
+            }
+            else{
+                return response([
+                    "status"=>false,
+                    "result"=>$this->Admin_Auth_result_error,
+                    "error"=>$this->Admin_Auth_error,
+
+                ],200);
+            }
+        }
+        else{
+            return response([
+                "status"=>false,
+                "result"=>$this->Admin_Auth_result_error,
+                "error"=>$this->Admin_Auth_error,
+
+            ],200);
+        }
+
+    }
+    public function CompanyGetAllParticipate(Request $request){
+        if(Auth::check())
+        {
+
+
+
+
+            if(Auth::user()->platform==$this->platform1)
+            {
+                $input=$request->all();
+                return (new ParticipateController)->GetAllParticipate($input);
             }
             else{
                 return response([

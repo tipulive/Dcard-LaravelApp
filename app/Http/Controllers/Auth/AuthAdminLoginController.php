@@ -65,6 +65,7 @@ class AuthAdminLoginController extends Controller
 
 		]))
         {
+
             $user=auth::guard('Admin')->user();
             $success['token']=$user->createToken('MyApp')->plainTextToken;
             $success['name']=$user->email;

@@ -25,8 +25,8 @@ class CreatePromotionsTable extends Migration
             $table->string('reach')->default('none')->index('reach');
             $table->string('gain')->default('none')->index('gain');
             $table->string('type_service')->default('none');
-            $table->string('started_date')->default('none')->index("started_date");
-            $table->string('ended_date')->default('none')->index("ended_date");
+            $table->string('started_date')->default('none')->index("started_date");//current timestamp
+            $table->string('ended_date')->default('none')->index("ended_date");//current timestamp
             $table->string('status')->default('none')->index("status");
             $table->timestamps();
         });

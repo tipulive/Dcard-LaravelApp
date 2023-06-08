@@ -282,7 +282,6 @@ table th {
 
 
 
-
 /* general styling */
 
 
@@ -292,6 +291,7 @@ table th {
 @include('components.header.header')
 <!--header-->
 <!--navigation Mobile-->
+
 <div class="cover-spin"></div>
 <span  style="font-size:30px;cursor:pointer" onclick="openNav()" class="mob-logo text-dark">&#9776; </span>
      <div id="mySidenav" class="sidenav" >
@@ -393,7 +393,7 @@ table th {
                                     </li>
 
                                     <li>
-                                        <a  href="#Create Product" onclick="return GetAllPromotionEvent()" aria-expanded="false">
+                                        <a  href="#Create Product" onclick="return ViewAllPromotionEvent()" aria-expanded="false">
                                             <i class="metismenu-icon"></i>View
                                         </a>
                                     </li>
@@ -552,19 +552,8 @@ table th {
 
 <!--search form-->
 <div class="container">
+
 <!--form -->
-<div class="main-card mb-3 card p-4">
-<div class="MainbigTitle">
-
-
-
-</div>
-<div class="MainForm">
-
-
-
-
-<!--Modal table-->
 
 <div class="modal fade bd-example-modal-lg viewOrder" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -597,6 +586,42 @@ table th {
   </div>
 </div>
 
+
+<div class="main-card mb-3 card p-4">
+<h2>
+    <p>Welcome</p>
+    @auth
+
+// Get the authenticated user
+
+$user = Sanctum::user();
+
+// Display the user's name
+
+<h1>Welcome, {{ $user->uid }}</h1>
+
+@endauth
+</h2>
+<div class="input-group mb-3">
+  <input type="text" class="form-control linkCopy" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+  <div class="input-group-append">
+    <button class="btn btn-outline-secondary" id="copy-link-btn" type="button">Button</button>
+  </div>
+</div>
+<div class="MainbigTitle">
+
+
+
+</div>
+<div class="MainForm">
+
+
+
+
+
+
+
+
 <!--Modal table-->
 
 <div class="Count_table">
@@ -622,6 +647,7 @@ table th {
         </div>
 <!--form -->
 </div>
+</div>
 
 
 <!--search form-->
@@ -629,6 +655,41 @@ table th {
 @include('Search')
 
 <script>
+
+    //copy Link //
+
+const copyLinkBtn = document.getElementById('copy-link-btn');
+
+// Add click event listener to the button
+copyLinkBtn.addEventListener('click', copyLinkToClipboard);
+
+// Function to copy the link to the clipboard
+function copyLinkToClipboard() {
+  // Create a temporary input element
+  const tempInput = document.createElement('input');
+
+  // Set the input value to the current URL
+  tempInput.value = $('.linkCopy').val();
+
+  // Append the input element to the document body
+  document.body.appendChild(tempInput);
+
+  // Select the input field
+  tempInput.select();
+
+  // Copy the selected text to the clipboard
+  document.execCommand('copy');
+
+  // Remove the temporary input element
+  document.body.removeChild(tempInput);
+
+  // Change the button text temporarily
+  copyLinkBtn.textContent = 'Link Copied!';
+
+  // Reset the button text after 2 seconds
+
+}
+    //copy Link //
 //search page
 
 
@@ -791,7 +852,8 @@ $('.MyRequest_table').html("");
     enableTime: true,
   mode: "range",
   minDate: "today",
-    dateFormat: "d-m-Y H:i:s",
+    //dateFormat: "d-m-Y H:i:s",
+    dateFormat: "Y-m-d H:i:s",
     time_24hr: true
     //defaultDate: [start_time, end_time]
 });
@@ -832,6 +894,257 @@ if(data.status){//return data as true
  //ViewAllProducts();
 
     alert("Promotion Created Successfully");
+    $('.formDataCreate :input').val("");
+    $('.mycreateProduct').val("Submit");
+
+   // LoadSavedComeFrom();
+
+}
+else{
+alert("Something is wrong please contact system Admin");
+$('.cover-spin').hide();
+
+}
+
+
+
+},
+error:function(data){
+    console.log(data);
+//alert("errors occured please retry this process again or contact system Admin");
+//window.location.href = "./login";
+}
+});
+    return false;
+
+}
+
+function ViewAllPromotionEvent(){
+    $('.testModalOrder').modal('show');
+
+    var Usertoken=localStorage.getItem("Usertoken");
+
+$.ajax({
+
+url:`./api/ViewAllPromotionEvent`,
+type:'get',
+headers: {
+    "Content-Type": "application/json;charset=UTF-8",
+    "Authorization": `Bearer ${Usertoken}`
+},
+
+success:function(data){
+
+
+if(data.status){//return data as true
+
+
+var resultData=data.result;
+
+
+$('.MainbigTitle').html(`
+<h5 class="text-center"> Safaris</h5>
+`);
+$('.MyRequest_table').html("");
+getData=`
+
+
+<table class="viewReqTable">
+<thead>
+<tr>
+  <th scope="col">#</th>
+  <th scope="col">Name</th>
+  <th scope="col">reach</th>
+  <th scope="col">gain</th>
+  <th scope="col">status</th>
+  <th scope="col">started</th>
+  <th scope="col">ended</th>
+  <th scope="col">Actions</th>
+
+</tr>
+</thead>
+<tbody>
+`;
+
+for(var i=0;i<resultData.length;i++){
+
+ getData+=`
+
+ <tr>
+ <td data-label="#">${i+1}</td>
+  <td data-label="Name">${resultData[i].promoName}</td>
+  <td data-label="reach">${resultData[i].reach}</td>
+  <td data-label="gain">${resultData[i].gain}</td>
+  <td data-label="gain">${resultData[i].status}</td>
+  <td data-label="start">${resultData[i].started_date}</td>
+  <td data-label="start">${resultData[i].ended_date}</td>
+  <td data-label="Actions"><button type="button" class="btn btn-dark" onclick="return ViewPromotion('${encodeURIComponent(JSON.stringify(resultData[i]))}')" >View</button>|<button type="button" class="btn btn-dark" onclick="return EditPromotion('${encodeURIComponent(JSON.stringify(resultData[i]))}')">Edit</button></td>
+
+
+</tr>`;
+
+}
+getData+=`
+</tbody>
+</table>`;
+
+$('.MainForm').html(getData);
+
+
+
+//console.log(hashfunction);
+//TableDisplayOrderTemplate(data)
+
+
+
+
+}
+else{
+
+$('.MyRequest_table').html("");
+}
+
+
+
+},
+error:function(data){
+//alert("errors occured please retry this process again or contact system Admin");
+//window.location.href = "./login";
+}
+});
+return false;
+
+}
+function ViewPromotion(data)
+{
+    data=JSON.parse(decodeURIComponent(data));
+    $('.viewOrder').modal('show');
+
+$('.MyTitleModal').html(`<h5 class="text-center">  <strong>View Promotion</strong></h5>`)
+$('.ModalPassword').html(`
+
+<ul class="list-group">
+  <li class="list-group-item active">${data.promoName}</li>
+  <li class="list-group-item text-danger">Status:${data.status}</li>
+  <li class="list-group-item">Title:${data.promo_msg}</li>
+  <li class="list-group-item">Reach:${data.reach}$</li>
+  <li class="list-group-item">Gain:${data.gain}$</li>
+  <li class="list-group-item">Started:${data.started_date}</li>
+  <li class="list-group-item">Ended:${data.ended_date}</li>
+  <li class="list-group-item">Created:${data.created_at}</li>
+</ul>
+
+`);
+}
+function EditPromotion(data){
+    data=JSON.parse(decodeURIComponent(data));
+    $('.viewOrder').modal('show');
+
+$('.MyTitleModal').html(`<h5 class="text-center">  <strong>Edit Promotion</strong></h5>`)
+$('.ModalPassword').html(`
+<form class="formDataCreate pl-2 pr-2" onsubmit="return EditPromotionEvent()">
+
+<div class="form-group">
+<label> Promotion Name <span class="text-danger">*</span></label>
+<input type="text" class="form-control" name="promoName" value="${data.promoName}" required/>
+<input type="text" class="form-control" name="uid" value="${data.uid}" required/>
+</div>
+<div class="form-group">
+
+<div class="form-group">
+<label>Reach<span class="text-danger">*</span></label>
+<input type="text" class="form-control Promo_reach" name="reach" value="${data.reach}" required onchange="return changePromoMsg()" onkeyup="changePromoMsg()"/>
+</div>
+
+<div class="form-group">
+<label>Bonus<span class="text-danger">*</span></label>
+<input type="text" class="form-control Promo_gain" name="gain" value="${data.gain}" required onchange="return changePromoMsg()" onkeyup="changePromoMsg()"/>
+</div>
+<p><span class="text-danger">First text</span> <span class="text-primary">Reach</span> <span class="text-info">second Text</span> <span class="text-success">gain</span> <span class="text-dark">third Text</span></p>
+<h6><h6 class="Promo_txtmsg text-danger">If you reach 0 i will give you 0</h6> <span class="reqclass"></span></h6>
+<hr>
+<div class="form-group">
+  <label for="exampleFormControlTextarea3">Message 1</label>
+  <textarea class="form-control Promo_msg1" name="msg1" placeholder="Enter msg1" rows="2" onchange="return changePromoMsg()" onkeyup="changePromoMsg()">If you reach</textarea>
+</div>
+
+<div class="form-group">
+  <label for="exampleFormControlTextarea3">Message 2</label>
+  <textarea class="form-control Promo_msg2" name="msg2" placeholder="Enter Comment" rows="2" onchange="return changePromoMsg()" onkeyup="changePromoMsg()">i will give you</textarea>
+</div>
+<div class="form-group">
+  <label for="exampleFormControlTextarea3">Message 2</label>
+  <textarea class="form-control Promo_msg3" name="msg2" placeholder="Enter Comment" rows="2" onchange="return changePromoMsg()" onkeyup="changePromoMsg()">i will give you</textarea>
+</div>
+<div class="form-group d-none">
+  <label for="exampleFormControlTextarea3">Message 3</label>
+  <textarea class="form-control Promo_submit" name="promoMsg" placeholder="Enter Comment" rows="7" ></textarea>
+</div>
+
+
+<div class="form-group">
+    <label for="">From Date-To</label>
+    <input type="text" class="form-control" name="extended_date" id="extended_date">
+    </div>
+
+    <div class="form-group">
+    <label for="">Choose Status</label>
+<select id="Ultra" name="status"  class="form-control">
+     <option value="on" selected>On</option>
+     <option value="off">off</option>
+
+</select>
+</div>
+
+<div class="form-group">
+
+<button  class="btn btn-danger mycreateProduct" >Submit</button>
+</div>
+
+
+</form>
+
+`);
+
+
+flatpickr('#extended_date',{
+    enableTime: true,
+  mode: "range",
+  minDate: "today",
+    //dateFormat: "d-m-Y H:i:s",
+    dateFormat: "Y-m-d H:i:s",
+    time_24hr: true
+    //defaultDate: [start_time, end_time]
+});
+$('#extended_date').val(`${data.started_date} to ${data.ended_date}`);
+    return false;
+}
+
+function EditPromotionEvent(){//Company
+    $('.cover-spin').show();
+
+       //
+       var Usertoken=localStorage.getItem("Usertoken");
+
+   $.ajax({
+
+url:`./api/EditPromotionEvent`,
+type:'post',
+beforeSend: function (xhr) {
+xhr.setRequestHeader('Authorization', `Bearer ${Usertoken}`);
+},
+    dataType: "json",
+data:$('.formDataCreate').serialize(),
+success:function(data){
+if(data.status){//return data as true
+
+    //localStorage.setItem('Usertoken',data.token);
+ //console.log(hashfunction);
+ $('.cover-spin').hide();
+
+ //ViewAllProducts();
+
+    alert("Promotion Edited Successfully");
     $('.formDataCreate :input').val("");
     $('.mycreateProduct').val("Submit");
 
@@ -1247,12 +1560,14 @@ error:function(data){
 
 //SafariCode Javascript//
 function CheckSafari(){
+
     closeNav();
 
-    $('.MainbigTitle').html("");
+  /*  $('.MainbigTitle').html("");
 $('.MyRequest_table').html("");
-$('.MainForm').html("");
+$('.MainForm').html("");*/
     SafariForm();
+    //$('.viewOrder').modal('show');
     return false;
 }
 function LoadSafariAddItemBtnTemplate(data){

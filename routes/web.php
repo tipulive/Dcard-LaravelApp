@@ -28,9 +28,9 @@ Route::get('admin/{id}', function ($id) {
     }
 
 });
-Route::get('company/{id}', function ($id) {
-    $user=DB::select("select subscriber,CompanyName,uid from admins where id=:id",array(
-        "id"=>$id
+Route::get('company/{CompanyName}', function ($CompanyName) {
+    $user=DB::select("select subscriber,CompanyName,uid from admins where CompanyName=:CompanyName",array(
+        "CompanyName"=>$CompanyName
     ));
 
     if($user){
@@ -72,9 +72,16 @@ Route::get('/register', function () {
     //return view('register');
     return view('/components/auth/users/register');
 });
-Route::get('/admin', function () {
-    return view('adminpage');
-});
+
+
+    // API routes requiring authentication
+    Route::get('/admin', function () {
+        return view('adminpage');
+
+       // return view('adminpage', ['token' => $token]);
+    });
+
+
 
 Route::get('/adminlogin', function () {
     //return view('adminlogin');

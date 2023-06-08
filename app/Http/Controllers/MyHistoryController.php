@@ -152,7 +152,7 @@ public function BalanceHistCreator($input)// and Bonus too
 
     $nameQuery=($name!='none')?"and users.name Like '%$name%'  limit 10":"order by redeemeds.id desc limit $LimitStart,$LimitEnd";
 
-    $check=DB::select("SELECT users.uid as uidUser ,redeemeds.id,redeemeds.uidCreator,redeemeds.balance,redeemeds.bonus,redeemeds.created_at,users.name FROM redeemeds
+    $check=DB::select("SELECT users.uid as uidUser ,redeemeds.id,redeemeds.description,redeemeds.uidCreator,redeemeds.balance,redeemeds.bonus,redeemeds.created_at,users.name FROM redeemeds
     INNER JOIN users  ON redeemeds.uidCreator=:uidCreator and redeemeds.uid=users.uid $optionCase $nameQuery ",array(
 
        // "subscriber"=>Auth::user()->subscriber,
@@ -249,16 +249,20 @@ public function GetAllParticipatedHist($input)
     $name=$input["name"]??"none";
     $nameQuery=($name!='none')?"and users.name Like '%$name%'  limit 10":"order by participated_hists.id desc limit $LimitStart,$LimitEnd";
     //$Name
-
-
+    $uidData=$input["uid"]??true;
+    $uid=($uidData)?"":'"uid"=>$uidData';
+    $uidQuery=($uidData)?"":'and participated_hists.uid=:uid';
 
     /*$check=DB::select("select *from participated_hists where subscriber=:subscriber order by id desc limit $LimitStart,$LimitEnd",array(
        "subscriber"=>Auth::user()->subscriber
 
     ));*/
-    $check=DB::select("SELECT users.uid as uidUser ,participated_hists.id,participated_hists.uid,participated_hists.actionName,promotions.promoName,promotions.gain,promotions.reach,participated_hists.inputData,participated_hists.created_at,users.name FROM participated_hists
-    INNER JOIN users INNER JOIN promotions ON participated_hists.uidCreator=:uidCreator and participated_hists.subscriber=:subscriber and participated_hists.uid=promotions.uid and participated_hists.uidUser=users.uid  $nameQuery",array(
 
+    $check=DB::select("SELECT users.uid as uidUser ,participated_hists.id,participated_hists.uid,participated_hists.actionName,promotions.promoName,promotions.gain,promotions.reach,participated_hists.inputData,participated_hists.created_at,users.name FROM participated_hists
+    INNER JOIN users INNER JOIN promotions ON participated_hists.uid=promotions.uid AND  participated_hists.uidCreator=:uidCreator and participated_hists.subscriber=:subscriber $uidQuery and participated_hists.uidUser=users.uid  $nameQuery",array(
+
+        //"uid"=>$input["uid"],
+        $uid,
         "subscriber"=>Auth::user()->subscriber,
         "uidCreator"=>Auth::user()->uid
     ));

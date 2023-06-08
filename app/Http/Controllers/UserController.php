@@ -31,6 +31,7 @@ class UserController extends Controller
     }
 
 
+
     public function UserRegisterEmail(Request $request){
         $input=$request->all();
 

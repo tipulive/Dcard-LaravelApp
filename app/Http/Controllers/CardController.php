@@ -29,7 +29,7 @@ class CardController extends Controller
 
     public function PrintCard($input){
 
-        $check=DB::select("select *from cards where subscriber=:subscriber",array("subscriber"=>Auth::user()->subscriber));
+        $check=DB::select("select *from cards where subscriber=:subscriber and status='none'",array("subscriber"=>Auth::user()->subscriber));
 
         return response([
             "status"=>true,

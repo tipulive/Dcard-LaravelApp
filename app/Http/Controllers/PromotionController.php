@@ -13,6 +13,7 @@ class PromotionController extends Controller
     {
         date_default_timezone_set(env('TIME_ZONE'));
         $this->today = date('Y-m-d H:i:s', time());
+        $this->today2 = date('d-m-Y H:i:s', time());
         $this->Appstate=env('APP_LIVE')?env('APP_PRO'):env('APP_DEV');
         $this->AppName=env('APP_NAME');
 
@@ -43,6 +44,7 @@ class PromotionController extends Controller
          "token"=>$input["token"]??'none',//token that is equal after promotion finished
          "started_date"=>$started,
          "ended_date"=>$endto,
+         //"ended_date"=>(STR_TO_DATE($endto, '%Y-%m-%d %H:%i:%s')),
          "status"=>"On",
          "created_at"=>$this->today,
 
@@ -69,8 +71,88 @@ class PromotionController extends Controller
 
 
     }
+
+
+    public function EditPromotionEvent($input)
+    {
+        $uid=$input['uid'];
+        $extension=$input["extended_date"];
+           $started=explode('to',$extension)[0];
+           $endto=explode('to',$extension)[1];
+        $check=DB::update("update promotions set promoName=:promoName,promo_msg=:promo_msg,reach=:reach,gain=:gain,started_date=:started_date,ended_date=:ended_date,updated_at=:updated_at,status=:status where uid=:uid and subscriber=:subscriber limit 1",array(
+            "uid"=>$input["uid"],
+            //"uidCreator"=>Auth::user()->uid,
+            "subscriber"=>Auth::user()->subscriber,
+            "promoName"=>$input["promoName"],
+            "promo_msg"=>$input["promoMsg"],
+            "reach"=>$input["reach"],//number
+            "gain"=>$input["gain"],//number
+            //"token"=>$input["token"]??'none',//token that is equal after promotion finished
+            "started_date"=>$started,
+            "ended_date"=>$endto,
+            //"ended_date"=>(STR_TO_DATE($endto, '%Y-%m-%d %H:%i:%s')),
+            "status"=>"On",
+            "updated_at"=>$this->today,
+        ));
+
+        if($check)
+        {
+
+         return response([
+             "status"=>true,
+             "result"=>$check
+
+
+         ],200);
+        }
+        else{
+         return response([
+             "status"=>false,
+             "result"=>$check,
+
+         ],200);
+        }
+
+
+
+
+    }
+    public function ViewAllPromotionEvent($input)//Get all promotion that has  On status
+    {
+
+
+        $check=DB::select("select *from promotions where subscriber=:subscriber limit 100",array(
+            "subscriber"=>Auth::user()->subscriber
+        ));
+        if($check)
+        {
+
+
+         return response([
+             "status"=>true,
+             "result"=>$check,
+             "datas"=>$this->today
+
+
+         ],200);
+        }
+        else{
+
+                return response([
+                    "status"=>false,
+                    "result"=>$check,
+
+                ],200);
+
+
+        }
+
+
+
+
+    }
     //start here
-    public function GetAllPromotionEvent($input)//Get all promotion On
+    public function GetAllPromotionEvent($input)//Get all promotion that has  On status
     {
 
         $check1=DB::update("update promotions set status='close' where status='on' and subscriber=:subscriber and ended_date<='$this->today' limit 50",array(
