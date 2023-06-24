@@ -64,6 +64,7 @@ $check1=DB::select("select Phonenumber,email from admins where email=:email or P
             'Ccode'=>$input['Ccode']??'none',
             'phone'=>$input['phone']??'none',
             'PhoneNumber'=>$input['PhoneNumber'],
+            'status'=>$input['status'],
             //'PhoneNumber'=>$PhoneNumber,
             'initCountry'=>$input['initCountry']??'none',
             //'uidCreator'=>Auth::user()->uid,

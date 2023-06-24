@@ -183,6 +183,60 @@ public function BalanceHistCreator($input)// and Bonus too
     }
 }
 
+public function WBalanceHistUser($input)// and Bonus too
+{
+
+
+    $LimitStart=$input["LimitStart"]??0;
+    $LimitEnd=$input["LimitEnd"]??10;
+    $uid=$input["uid"]??"none";
+    $option=strtolower($input["optionCase"])??'';
+    $optionData=($option=="balance"|| $option=="bonus")?$option:'';
+
+    $optionCase=($optionData=="balance")?"and redeemeds.balance!='0'":(($optionData=="bonus")?"and redeemeds.bonus!='0'":$optionData);
+
+
+
+    /*$check=DB::select("SELECT redeemeds.id,redeemeds.description,redeemeds.uidCreator,redeemeds.balance,redeemeds.bonus,redeemeds.created_at,admins.name FROM redeemeds redeemeds.uid=:uid $optionCase order by redeemeds.id desc limit $LimitStart,$LimitEnd ",array(
+
+       // "subscriber"=>Auth::user()->subscriber,
+        "uid"=>$input["uid"],
+        "uidCreator"=>Auth::user()->uid
+    ));*/
+
+
+
+    $check=DB::select("SELECT admins.uid as uidAdmin ,redeemeds.id,redeemeds.description,redeemeds.uidCreator,redeemeds.balance,redeemeds.bonus,redeemeds.created_at,admins.name FROM redeemeds
+    INNER JOIN admins  ON redeemeds.uidCreator=admins.uid  where redeemeds.uid=:uid $optionCase order by redeemeds.id desc limit $LimitStart,$LimitEnd",array(
+
+       // "subscriber"=>Auth::user()->subscriber,
+       "uid"=>$input["uid"],
+    ));
+   /* $check=DB::select("select *from products limit $LimitStart,$LimitEnd",array(
+       // "uid"=>$input["uid"],
+    ));*/
+    if($check)
+    {
+        return response([
+            "status"=>true,
+            "result"=>$check,
+
+
+        ],200);
+
+    }
+    else{
+
+        return response([
+            "status"=>false,
+            "result"=>$check,
+
+
+        ],200);
+
+    }
+}
+
 public function participatedHist($input,$action,$moreQuery)
 {
 

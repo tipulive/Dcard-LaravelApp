@@ -24,7 +24,7 @@ class AccountController extends Controller
         if(Auth::check())
         {
 
-           // return (new User_ACC_Controller)->view();
+           return (new User_ACC_Controller)->view();
         }
         else if(Auth::guard('Admin')->check())
         {

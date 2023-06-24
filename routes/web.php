@@ -18,9 +18,9 @@ use App\Http\Controllers\CompanyController;
 Route::get('/testphone', function () {
     return view('testphone');
 });
-Route::get('admin/{id}', function ($id) {
-    $user=DB::select("select subscriber,CompanyName,uid from admins where id=:id",array(
-        "id"=>$id
+Route::get('admin/{uid}', function ($uid) {
+    $user=DB::select("select subscriber,CompanyName,uid from admins where uid=:uid",array(
+        "uid"=>$uid
     ));
     if($user){
         return view('/components/auth/admin/company', ['user' => $user]);
@@ -28,9 +28,9 @@ Route::get('admin/{id}', function ($id) {
     }
 
 });
-Route::get('company/{CompanyName}', function ($CompanyName) {
-    $user=DB::select("select subscriber,CompanyName,uid from admins where CompanyName=:CompanyName",array(
-        "CompanyName"=>$CompanyName
+Route::get('company/{subscriber}', function ($subscriber) {
+    $user=DB::select("select subscriber,CompanyName,uid from admins where subscriber=:subscriber",array(
+        "subscriber"=>$subscriber
     ));
 
     if($user){

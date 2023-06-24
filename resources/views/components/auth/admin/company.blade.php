@@ -24,6 +24,7 @@
             <form action="#" class="Form_UserRegister">
             <div class="form-group first ">
                 <label for="username">Company Name</label>
+                <input type="hidden" value="active1" name="status"/>
                 <input autocomplete="off" type="text"  class="form-control" name="CompanyName" Placeholder="Enter Company Name" required>
               </div>
 

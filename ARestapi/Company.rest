@@ -13,6 +13,7 @@ Content-Type: application/json
 "password": "{{password}}"
 }
 
+
 ### Company Login with phone
 POST  {{baseUrl}}/AdminLoginPhone/
 Content-Type: application/json
@@ -73,7 +74,10 @@ Authorization: Bearer {{Auth_token}}
 "carduid":"TEALTD_lN7o8_1672352175"
 
 }
-
+### view all
+GET  {{baseUrl}}/view
+content-type: application/json;charset=UTF-8
+Authorization: Bearer {{Auth_token}}
 ### Add Balance
 
 POST  {{baseUrl}}/AddBalance

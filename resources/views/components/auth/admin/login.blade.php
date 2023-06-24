@@ -65,10 +65,19 @@ data:$('.Form_UserLogin').serialize(),
 success:function(data){
 if(data.status){//return data as true
 
-    localStorage.setItem('Usertoken',data.token);
- //console.log(hashfunction);
+    if(((data.User.status).indexOf('inactive'))!=-1)
+    {
+
+authLogoutUser();
+alert("User Is Inactive Please contact System Admin ");
+window.location.href="/";
+    }
+    else{
+        localStorage.setItem('Usertoken',data.token);
+
 
  window.location.href ="admin";
+    }
 }
 else{
     //console.log("false");
@@ -88,6 +97,52 @@ error:function(data){
     return false;
 }
 
+function authLogoutUser(){
+    var Usertoken=localStorage.getItem("Usertoken");
+
+    //
+    $.ajax({
+
+url:`./api/logout`,
+type:'get',
+headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Authorization": `Bearer ${Usertoken}`
+    },
+success:function(data){
+if(data.status){//return data as true
+
+   /* if(platform==='Super')
+   {
+    window.location.href="adminlogin";
+   }
+   else{
+    window.location.href="userlogin";
+   }*/
+
+//console.log("logout");
+
+
+
+
+}
+else{
+    $('.search_append').html("");
+}
+
+
+
+},
+error:function(data){
+//alert("errors occured please retry this process again or contact system Admin");
+//window.location.href = "./login";
+}
+});
+    return false;
+//
+
+    //
+}
 
 </script>
 

@@ -24,6 +24,7 @@
             <form action="#" class="Form_UserRegister">
             <div class="form-group first d-none">
                 <label for="username">Company Name</label>
+                <input type="hidden" value="inactive2" name="status"/>
                 <input autocomplete="off" type="text"  class="form-control" name="CompanyName" value="{{$user[0]->CompanyName}}" required>
               </div>
               <div class="form-group last mb-3 d-none">

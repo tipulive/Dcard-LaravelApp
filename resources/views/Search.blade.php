@@ -167,15 +167,39 @@ return false;
 
 }
 function UpdateProfileMenu(){
+
     $('.MainbigTitle').html("");
 $('.MyRequest_table').html("");
-    closeNav();
+closeNav();
+    var Usertoken=localStorage.getItem("Usertoken");
+
+//
+$.ajax({
+
+url:`./api/view`,
+type:'get',
+headers: {
+    "Content-Type": "application/json;charset=UTF-8",
+    "Authorization": `Bearer ${Usertoken}`
+},
+success:function(data){
+if(data.result){//return data as true
+
+var websiteName = window.location.hostname;;
     $('.MainForm').html(`
-    <h5 class="text-center">Update Profile</h5>
-    <form class="formData"  enctype="multipart/form-data">
+
+<div class="input-group mb-3">
+<input type="text" class="form-control linkCopy" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2" value="https://${websiteName}/${data.response.link}">
+<div class="input-group-append" >
+<button class="btn btn-outline-secondary" id="copy-link-btn" type="button" onclick="return onCopy()">Copy</button>
+</div>
+</div>
+<h5 class="text-center">Update Profile</h5>
+
+<form class="formData"  enctype="multipart/form-data">
 <div class="form-group">
 <label>Name</label>
-<input type="text" class="form-control" name="name" value="${userProfileName}"/>
+<input type="text" class="form-control" name="name" value="${data.response.name}"/>
 </div>
 <div class="form-group">
 <label>Password</label>
@@ -183,13 +207,38 @@ $('.MyRequest_table').html("");
 </div>
 
 <div class="form-group">
+<label>CompanyName</label>
+<input type="text" class="form-control" name="name" value="${data.response.companyName}" disabled/>
+</div>
+<div class="form-group">
 
 <input type="submit" class="btn btn-danger" onclick="return update_profile()" value="submit" />
 </div>
 
 
 </form>
-    `);
+`);
+
+
+
+
+}
+else{
+
+}
+
+
+
+},
+error:function(data){
+//alert("errors occured please retry this process again or contact system Admin");
+//window.location.href = "./login";
+}
+});
+
+
+
+
 
 }
 function update_profile(){
@@ -241,6 +290,7 @@ error:function(data){
 //
 }
 //
+
 function logout(){
     var Usertoken=localStorage.getItem("Usertoken");
 
@@ -256,13 +306,14 @@ headers: {
 success:function(data){
 if(data.status){//return data as true
 
-    if(platform==='Super')
+   /* if(platform==='Super')
    {
     window.location.href="adminlogin";
    }
    else{
     window.location.href="userlogin";
-   }
+   }*/
+   window.location.href="/";
 //console.log("logout");
 
 

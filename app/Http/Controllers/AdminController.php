@@ -39,9 +39,13 @@ class AdminController extends Controller
     public function AdminCreateCompany(Request $request){
 
         $input=$request->all();
-                return (new AuthAdminRegisterController)->AdminCreateCompany($input);
+        return (new AuthAdminRegisterController)->AdminCreateCompany($input);
 
-    }
+
+
+
+
+        }
 
 
 
@@ -830,13 +834,56 @@ else{
             $platform1=env('PLATFORM1');
             if(Auth::user()->platform==$platform1)
             {
-                $input=$request->all();
+                //$input=$request->all();
                 /*return response([
                     "status"=>$input,
                 ],200);*/
-                return (new User_ACC_Controller)->ViewUsers($input);
+                //return (new User_ACC_Controller)->ViewUsers($input);
+
+                $check=DB::select("select name,created_at,uid,status,CompanyName,subscriber from admins");
+                if($check)
+             {
+              return response([
+                "myuid"=>Auth::user()->uid,
+                  "myStatus"=>Auth::user()->status,
+                  "status"=>true,
+                  "result"=>$check,
+
+              ],200);
+             }
+             else{
+              return response([
+                  "status"=>false,
+                  "result"=>$check,
+
+              ],201);
+             }
+
+
             }
-            else{
+            else if(Auth::user()->platform==(env('PLATFORM3'))){
+
+                $check=DB::select("select name,created_at,uid,status,CompanyName,subscriber from admins where subscriber=:subscriber limit 10",array(
+                    "subscriber"=>Auth::user()->subscriber
+                ));
+                if($check)
+             {
+              return response([
+                "myuid"=>Auth::user()->uid,
+                "myStatus"=>Auth::user()->status,
+                  "status"=>true,
+                  "result"=>$check,
+
+              ],200);
+             }
+             else{
+              return response([
+                  "status"=>false,
+                  "result"=>$check,
+
+              ],201);
+             }
+
                 return response([
                     "status"=>false,
                     "result"=>$this->Admin_Auth_result_error,
@@ -864,17 +911,34 @@ else{
 
 
 
-
+            $input=$request->all();
             $platform1=env('PLATFORM1');
             if(Auth::user()->platform==$platform1)
             {
-                $input=$request->all();
+
                 /*return response([
                     "status"=>$input,
                 ],200);*/
                 return (new User_ACC_Controller)->ChangePlatform($input);
             }
+            else if(Auth::user()->platform==(env('PLATFORM3')))
+            {
+                if(Auth::user()->subscriber==$input["subscriber"])
+                {
+                    return (new User_ACC_Controller)->ChangePlatform($input);
+                }
+                else{
+                    return response([
+                        "status"=>false,
+                        "result"=>$this->Admin_Auth_result_error,
+                        "error"=>$this->Admin_Auth_error,
+
+                    ],200);
+                }
+
+            }
             else{
+
                 return response([
                     "status"=>false,
                     "result"=>$this->Admin_Auth_result_error,

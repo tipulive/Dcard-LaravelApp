@@ -76,6 +76,7 @@ data:$('.Form_UserLogin').serialize(),
 success:function(data){
 if(data.status){//return data as true
 
+
     localStorage.setItem('Usertoken',data.token);
  //console.log(hashfunction);
  window.location.href ="/";

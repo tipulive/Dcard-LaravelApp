@@ -320,38 +320,7 @@ table th {
                                 </a>
                             </li>
 
-                              <li class="app-sidebar__heading">Stocks</li>
-                            <li class="mm-active">
-                                <a href="#" aria-expanded="true">
-                                    <i class="metismenu-icon pe-7s-rocket"></i>Products
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
 
-                            </li>
-                                <ul class="mm-collapse mm-show" style="">
-                                    <li>
-                                        <a href="#View All Products" onclick="return ViewAllProducts()" aria-expanded="false">
-                                            <i class="metismenu-icon"></i>View
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a  href="#Create Product" onclick="return CreateProductMenu()" aria-expanded="false">
-                                            <i class="metismenu-icon"></i>Add New
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#View All Products" onclick="return ViewAllProductWithEdit()" aria-expanded="false">
-                                            <i class="metismenu-icon"></i>Edit
-                                        </a>
-                                    </li>
-
-                                    </li>
-
-
-
-
-                                </ul>
 
 
                           <!--CardCode-->
@@ -423,34 +392,7 @@ table th {
 
                                     </ul>
                                     <!--Quick Bonus -->
-                                    <li class="app-sidebar__heading">Others</li>
-                            <li class="mm-active">
-                                <a href="#" aria-expanded="true">
-                                    <i class="metismenu-icon pe-7s-rocket"></i>Others
-                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                </a>
-                            </li>
-                                <ul class="mm-collapse mm-show" style="">
-                                    <li>
-                                        <a href="#View All Products" onclick="return GetAllParticipateEvent()" aria-expanded="false">
-                                            <i class="metismenu-icon"></i>View Events
-                                        </a>
-                                    </li>
 
-                                    <li>
-                                        <a  href="#Create Product" onclick="return GetAllBonus()" aria-expanded="false">
-                                            <i class="metismenu-icon"></i>Bonus
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a  href="#Create Product" onclick="return GetAllBalance()" aria-expanded="false">
-                                            <i class="metismenu-icon"></i>Balance
-                                        </a>
-                                    </li>
-
-
-                                    </ul>
 
                                     <!--CardCode-->
 
@@ -588,26 +530,8 @@ table th {
 
 
 <div class="main-card mb-3 card p-4">
-<h2>
-    <p>Welcome</p>
-    @auth
 
-// Get the authenticated user
 
-$user = Sanctum::user();
-
-// Display the user's name
-
-<h1>Welcome, {{ $user->uid }}</h1>
-
-@endauth
-</h2>
-<div class="input-group mb-3">
-  <input type="text" class="form-control linkCopy" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-  <div class="input-group-append">
-    <button class="btn btn-outline-secondary" id="copy-link-btn" type="button">Button</button>
-  </div>
-</div>
 <div class="MainbigTitle">
 
 
@@ -617,7 +541,7 @@ $user = Sanctum::user();
 
 
 
-
+</div>
 
 
 
@@ -658,13 +582,16 @@ $user = Sanctum::user();
 
     //copy Link //
 
-const copyLinkBtn = document.getElementById('copy-link-btn');
+
+
 
 // Add click event listener to the button
-copyLinkBtn.addEventListener('click', copyLinkToClipboard);
+//copyLinkBtn.addEventListener('click', copyLinkToClipboard);
+
 
 // Function to copy the link to the clipboard
-function copyLinkToClipboard() {
+function onCopy() {
+    const copyLinkBtn = document.getElementById('copy-link-btn');
   // Create a temporary input element
   const tempInput = document.createElement('input');
 
@@ -689,6 +616,7 @@ function copyLinkToClipboard() {
   // Reset the button text after 2 seconds
 
 }
+
     //copy Link //
 //search page
 
@@ -1047,7 +975,7 @@ $('.ModalPassword').html(`
 <div class="form-group">
 <label> Promotion Name <span class="text-danger">*</span></label>
 <input type="text" class="form-control" name="promoName" value="${data.promoName}" required/>
-<input type="text" class="form-control" name="uid" value="${data.uid}" required/>
+<input type="hidden" class="form-control" name="uid" value="${data.uid}" required/>
 </div>
 <div class="form-group">
 
@@ -4569,12 +4497,13 @@ headers: {
 
 success:function(data){
 
-
+//active1 ni owner of company
 if(data.status){//return data as true
 $('.cover-spin').hide();
-
-
-
+var myuid=data.myuid;
+var myStatus=data.myStatus;
+//console.log(data.result);
+var checkMystatus=(myStatus.indexOf('2'))!=-1?'d-none':'';
 var data=data.result;
 
 
@@ -4584,22 +4513,29 @@ getData=`
 <tr>
   <th scope="col">#</th>
   <th scope="col">Name</th>
+  <th scope="col">Company</th>
+  <th scope="col" class="${checkMystatus}">Status</th>
   <th scope="col">Created</th>
-  <th scope="col">Actions</th>
+  <th scope="col" class="${checkMystatus}">Actions</th>
 </tr>
 </thead>
 `;
 
 for(var i=0;i<data.length;i++){
 //it means that on receiv show Dispatch else show Received
-var banIcon=`  <i class="fas fa-ban text-danger btn" onclick="changePlatform('${data[i].name}','${data[i].userid}','${data[i].platform}')"></i>`;
-var checkIcon=`  <i class="fas fa-check text-success btn" onclick="changePlatform('${data[i].name}','${data[i].userid}','${data[i].platform}')"></i>`;
-var platformcheck=data[i].platform==='user'?checkIcon:banIcon;
- getData+=` <tr>
+var banIcon=`  <i class="fas fa-ban text-danger btn" onclick="changePlatform('${data[i].name}','${data[i].uid}','${data[i].status}','${data[i].subscriber}')"></i>`;
+var checkIcon=`<i class="fas fa-check text-success btn" onclick="changePlatform('${data[i].name}','${data[i].uid}','${data[i].status}','${data[i].subscriber}')"></i>`;
+var myStatusCut=(data[i].status).slice(0,-1);
+var platformcheck=myStatusCut==='active'?checkIcon:banIcon;
+var checkHide=myuid===data[i].uid?'d-none':'';
+var myStatusCut2=((data[i].status).slice(-1))==='1'?'Creator':'Admin';
+ getData+=` <tr class="${checkHide}">
   <td data-label="#">${i+1}</td>
   <td data-label="Name">${data[i].name}</td>
+  <td data-label="Company">${data[i].CompanyName}</td>
+  <td data-label="Status"class="${checkMystatus}">${myStatusCut2}</td>
   <td data-label="Created_at">${data[i].created_at}</td>
-  <td data-label="Actions"><button type="button" class="btn btn-dark" onclick="return UserAddInvoice('${data[i].userid}','${data[i].name}')">Invoice</button>|<button type="button" class="btn btn-dark" onclick="return UserReport('${data[i].userid}','${data[i].name}')">Report</button>${platformcheck}</td>
+  <td data-label="Actions" class="${checkMystatus}">${platformcheck}</td>
 
 </tr>`;
 
@@ -4625,9 +4561,11 @@ return false;
 
 }
 
-function changePlatform(name,ThisUserid,userPlatform) {
-    var checkAct=userPlatform==='user'?'to be Inactive':'to be Active';
- var checkPlatformSubmit=userPlatform==='user'?'client':'user';
+function changePlatform(name,ThisUserid,userStatus,subscriber) {
+    var indUserStatus=userStatus.slice(-1);
+    userStatus=userStatus.slice(0,-1);
+    var checkAct=userStatus==='active'?'to be Inactive':'to be Active';
+ var checkPlatformSubmit=userStatus==='active'?`inactive${indUserStatus}`:`active${indUserStatus}`;
     if(confirm(`Do you Want ${name}  ${checkAct} `))
     {
 //
@@ -4645,7 +4583,8 @@ headers: {
 },
 data:{
 userid:ThisUserid,
-platform:checkPlatformSubmit,
+status:checkPlatformSubmit,
+subscriber:subscriber
 },
 success:function(data){
 if(data.status){//return data as true

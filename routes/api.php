@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('/CreateCompany','AdminController@AdminCreateCompany')->name('AdminCreateCompany');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -32,7 +33,6 @@ Route::post('/UserLoginEmail','UserController@UserLoginEmail')->name('UserLoginE
 Route::post('/AdminRegisterEmail','AdminController@AdminRegisterEmail')->name('AdminRegisterEmail');
 Route::post('/AdminLoginEmail','AdminController@AdminLoginEmail')->name('AdminLoginEmail');
 Route::post('/AdminLoginPhone','AdminController@AdminLoginPhone')->name(' AdminLoginPhone');
-Route::post('/CreateCompany','AdminController@AdminCreateCompany')->name('AdminCreateCompany');
 
 //Route::get('/testauth','TestController@testauth')->name('testauth');
 
@@ -80,6 +80,7 @@ Route::get('/GetCompanyRecord','CompanyController@CompanyTopupGetCompanyRecord')
 Route::get('/GetBalanceUser','CompanyController@CompanyTopupBalanceUser')->name('CompanyTopupBalanceUser');
 Route::get('/GetBalanceHist','CompanyController@CompanyTopupBalanceHistUser')->name('CompanyTopupBalanceHistUser');
 Route::get('/GetBalanceHistCreator','CompanyController@CompanyTopupBalanceHistCreator')->name('CompanyTopupBalanceHistCreator');
+Route::get('/GetWBalanceHistUser','CompanyController@CompanyTopupWBalanceHistUser')->name('CompanyTopupWBalanceHistUser');
 
 /*Quickie Bonus */
 Route::post('/SetupQuickBonus','CompanyController@CompanyPartSetupQuickBonus')->name('CompanyPartSetupQuickBonus');
@@ -108,12 +109,19 @@ Route::post('/SafariEditItem','CompanyController@CompanySafariEditItem')->name('
 Route::post('/SafariDeleteItem','CompanyController@CompanySafariDeleteItem')->name('CompanySafariDeleteItem');
 Route::post('/SafariSpent','CompanyController@CompanySafariSpent')->name('CompanySafariSpent');
 Route::get('/SafariCalculate','CompanyController@CompanySafariCalculate')->name('CompanySafariCalculate');
-
+Route::get('/AdminViewUsers','AdminController@AdminViewUsers')->name('AdminViewUsers');
+Route::get('/AdminChangePlatform','AdminController@AdminChangePlatform')->name('AdminChangePlatform');
 
 /*Users */
 
 
+/* Account*/
 
+Route::get('/view','AccountController@view')->name('view');
+Route::post('/update','AccountController@update')->name('update');
+Route::post('/delete','AccountController@delete')->name('delete');
+
+/*Account*/
 
 /*-Participate */
 

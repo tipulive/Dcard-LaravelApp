@@ -12,15 +12,20 @@ class User_ACC_Controller extends Controller
     //
     public function view(){
 
+        $uid=Auth::user()->uid;
+        $subscriber=Auth::user()->subscriber;
+        $link=env('PLATFORM3')==(Auth::user()->platform)?'company/'.$subscriber.'':'admin/'.$uid.'';
+
         $users=array(
 
-            "userid"=>Auth::user()->userid,
+            "uid"=>Auth::user()->uid,
             "email"=>Auth::user()->email,
            // "name"=>Auth::user()->name,
-            "fname"=>Auth::user()->fname,
-            "lname"=>Auth::user()->lname,
-            "password"=>Auth::user()->passdecode,
-            "tel"=>Auth::user()->tel,
+            "name"=>Auth::user()->name,
+            "companyName"=>Auth::user()->CompanyName,
+            "subscriber"=>Auth::user()->subscriber,
+            "link"=>$link,
+
             "country"=>Auth::user()->country,
 
     );
@@ -50,11 +55,11 @@ class User_ACC_Controller extends Controller
       ],201);
      }
     }
-    public function ChangePlatform($input)
+    public function ChangePlatform($input)//status
     {
-        $check=DB::update("update users set platform=:platform where userid=:userid",array(
-            "platform"=>$input["platform"],
-            "userid"=>$input["userid"],
+        $check=DB::update("update admins set status=:status where uid=:uid",array(
+            "status"=>$input["status"],
+            "uid"=>$input["userid"],
         ));
         if($check)
      {
